@@ -17,7 +17,23 @@ export interface LoraInfo {
   name: string;
   triggerWords: string[];
 }
-export type Arch = 'sd1' | 'sd2' | 'sdxl' | 'sd3' | 'flux' | 'unknown';
+/** Model families, named after Forge Classic (Neo)'s UI presets (plus sd2 and sd3). */
+export type Arch =
+  | 'sd'
+  | 'sd2'
+  | 'xl'
+  | 'sd3'
+  | 'flux'
+  | 'klein'
+  | 'qwen'
+  | 'lumina'
+  | 'zit'
+  | 'wan'
+  | 'anima'
+  | 'ernie'
+  | 'pid'
+  | 'krea'
+  | 'unknown';
 export interface Choices {
   checkpoints: string[];
   samplers: string[];

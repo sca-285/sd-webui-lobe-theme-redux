@@ -75,31 +75,47 @@ export const weightOf = (name: string) => lists?.weights[name] ?? defaultWeight(
 export const formatWeight = (weight: number) => String(Math.round(weight * 100) / 100);
 
 export const ARCH_LABEL: Record<Arch, string> = {
-  flux: 'FLUX',
-  sd1: 'SD1',
+  anima: 'Anima',
+  ernie: 'Ernie',
+  flux: 'Flux',
+  klein: 'Klein',
+  krea: 'Krea',
+  lumina: 'Lumina',
+  pid: 'PiD',
+  qwen: 'Qwen',
+  sd: 'SD1',
   sd2: 'SD2',
   sd3: 'SD3',
-  sdxl: 'XL',
   unknown: '',
+  wan: 'Wan',
+  xl: 'XL',
+  zit: 'Z-Image',
 };
 
-/** Model family of what is loaded now (Forge's UI preset first, then the server). */
-export const currentArch = async(): Promise<Arch | 'sd'> => {
-  const preset =
+const PRESETS = new Set<string>(Object.keys(ARCH_LABEL).filter((key) => key !== 'unknown'));
+
+/** Forge's "UI Preset" (a dropdown in Neo, radio buttons in Forge), if there is one. */
+export const presetValue = () =>
+  (
     $<HTMLInputElement>('#forge_ui_preset input[type=radio]:checked')?.value ||
     $<HTMLInputElement>('#forge_ui_preset input:not([type=radio])')?.value ||
-    '';
-  const value = preset.trim().toLowerCase();
-  if (value === 'sd') return 'sd';
-  if (value === 'xl') return 'sdxl';
-  if (value === 'flux') return 'flux';
+    ''
+  )
+    .trim()
+    .toLowerCase();
+
+/** Model family of what is loaded now (Forge's UI preset first, then the server). */
+export const currentArch = async(): Promise<Arch> => {
+  const preset = presetValue();
+  if (PRESETS.has(preset)) return preset as Arch;
   const model = await getModel();
   return model.arch;
 };
 
-export const isCompatible = (lora: Arch | undefined, model: Arch | 'sd') => {
+export const isCompatible = (lora: Arch | undefined, model: Arch) => {
   if (!lora || lora === 'unknown' || model === 'unknown') return true;
-  if (model === 'sd') return lora === 'sd1' || lora === 'sd2';
+  // Forge's "sd" preset covers SD 1.x and 2.x
+  if (model === 'sd' || model === 'sd2') return lora === 'sd' || lora === 'sd2';
   return lora === model;
 };
 

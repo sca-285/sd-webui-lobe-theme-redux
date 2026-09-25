@@ -18,6 +18,7 @@ import {
   formatWeight,
   isCompatible,
   loadLoraLists,
+  presetValue,
   loadLoras,
   loraTagPattern,
   pushRecent,
@@ -82,7 +83,7 @@ export const startLoraTools = ({ colors, text }: { colors: { fill: string; prima
   let infos = new Map<string, LoraInfo>();
   let favorites = new Set<string>();
   let recent: string[] = [];
-  let modelArch: Arch | 'sd' = 'unknown';
+  let modelArch: Arch = 'unknown';
   const filters = new Map<string, Filter>();
   let refetched = false;
 
@@ -182,7 +183,7 @@ export const startLoraTools = ({ colors, text }: { colors: { fill: string; prima
       }
       const archButton = bar.querySelector<HTMLButtonElement>('button[data-filter="compatible"]');
       if (archButton) {
-        const label = modelArch === 'sd' ? 'SD' : ARCH_LABEL[modelArch as Arch];
+        const label = ARCH_LABEL[modelArch];
         archButton.textContent = label ? `${text.compatible} · ${label}` : text.compatible;
       }
       const count = bar.querySelector('.count');
@@ -386,8 +387,19 @@ export const startLoraTools = ({ colors, text }: { colors: { fill: string; prima
     observer.observe(document.body, { childList: true, subtree: true });
   });
 
+  // badges and the "compatible" filter follow Forge's UI preset as it changes
+  let lastPreset = presetValue();
+  const presetTimer = setInterval(async() => {
+    const preset = presetValue();
+    if (preset === lastPreset) return;
+    lastPreset = preset;
+    modelArch = await currentArch();
+    refreshAll();
+  }, 1000);
+
   return () => {
     observer.disconnect();
+    clearInterval(presetTimer);
     document.removeEventListener('click', onClick, true);
     document.removeEventListener('wheel', onWheel, true);
     style.remove();
