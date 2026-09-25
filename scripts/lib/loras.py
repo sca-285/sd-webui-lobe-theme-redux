@@ -54,15 +54,20 @@ _NAMED = (
 )
 
 
+_WHOLE_WORDS = {"anima", "ernie", "krea", "wan", "pid", "qwen", "pony"}
+
+
 def _family_from_text(text: str):
     text = text.lower()
     if not text:
         return None
     for words, family in _NAMED:
         for word in words:
-            # short names only at the start of a word ("pid" in "rapid" is not PiD)
-            if len(word) <= 4:
-                if re.search(rf"(?<![a-z]){re.escape(word)}", text):
+            # short names only at the start of a word ("pid" in "rapid" is not
+            # PiD), and some only as a whole word ("animagine" is SDXL, not Anima)
+            if len(word) <= 5:
+                tail = "(?![a-z])" if word in _WHOLE_WORDS else ""
+                if re.search(rf"(?<![a-z]){re.escape(word)}{tail}", text):
                     return family
             elif word in text:
                 return family
