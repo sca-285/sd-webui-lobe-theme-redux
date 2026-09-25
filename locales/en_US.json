@@ -1,0 +1,337 @@
+{
+  "brand": {
+    "custom": "Custom",
+    "kitchen": "Kitchen",
+    "lobe": "LobeHub"
+  },
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "custom": {
+    "initializing": "Stable Diffusion / Lobe Theme Redux is initializing, please wait..."
+  },
+  "footer": {
+    "community": "Community",
+    "help": "Help",
+    "moreProducts": "More Products",
+    "resources": "Resources"
+  },
+  "header": {
+    "feedback": "Feedback",
+    "setting": "Setting",
+    "switchTheme": "Switch Light/Dark Theme",
+    "history": "Generation history",
+    "commandPalette": "Command palette (Ctrl+K)",
+    "nav": {
+      "allTabs": "All tabs",
+      "search": "Find a tab",
+      "pin": "Pin to the bar",
+      "unpin": "Unpin from the bar",
+      "reset": "Reset bar",
+      "empty": "No tab matches",
+      "hint": "Pinned tabs stay in the bar · Ctrl+K searches everything",
+      "groups": {
+        "generate": "Generate",
+        "tools": "Tools",
+        "extensions": "Extensions",
+        "system": "System"
+      }
+    }
+  },
+  "modal": {
+    "themeFeedback": {
+      "title": "Theme Feedback"
+    },
+    "themeSetting": {
+      "desc": "Preferences and Layout Settings",
+      "title": "Theme Settings"
+    }
+  },
+  "prompt": {
+    "area": {
+      "attribute": "Attribute Selection",
+      "object": "Object Selection",
+      "tag": "Tag Selection"
+    },
+    "load": "Load Prompt",
+    "negative": "Negative",
+    "positive": "Positive",
+    "set": "Set Prompt"
+  },
+  "setting": {
+    "button": {
+      "reset": "Revert to default",
+      "submit": "Apply and Restart Interface"
+    },
+    "confirmPageUnload": {
+      "desc": "Helps prevent loss of unsaved data",
+      "title": "Confirmation on page leaving"
+    },
+    "customFont": {
+      "desc": "When enabled, it will automatically load a webfont to enhance the display of text in Chinese, English, and code",
+      "title": "Custom Font"
+    },
+    "customLogo": {
+      "desc": "Support URL / Base64 / Emoji symbols",
+      "title": "Custom Logo"
+    },
+    "customTitle": {
+      "desc": "Custom Logo Title",
+      "title": "Custom Title"
+    },
+    "extraNetworkSidebar": {
+      "defaultCardSize": {
+        "desc": "Default value of model cover size when starting",
+        "title": "Model Cover Size"
+      },
+      "defaultExpand": {
+        "desc": "Whether to expand the sidebar by default when starting",
+        "title": "Default Expand"
+      },
+      "defaultWidth": {
+        "desc": "Default width of the sidebar when starting",
+        "title": "Default Width"
+      },
+      "displayMode": {
+        "desc": "Fixed as grid mode for constant display, auto-expand when the mouse moves to the side in floating mode",
+        "title": "Display Mode"
+      },
+      "enable": {
+        "desc": "Enable the extra network sidebar on the right side",
+        "title": "Enable"
+      }
+    },
+    "group": {
+      "experimental": "Experimental Features",
+      "extraNetworkSidebar": "Extra Network Sidebar",
+      "layout": "Layout Settings",
+      "promptTextarea": "Prompt Textbox",
+      "quickSettingSidebar": "Quick Setting Sidebar",
+      "theme": "Theme Settings",
+      "tools": "Tools"
+    },
+    "hideFooter": {
+      "desc": "Hide the theme footer and only display the default footer of stable diffusion webui",
+      "title": "Hide Footer"
+    },
+    "imageInfo": {
+      "desc": "Display better image information in the generated image",
+      "title": "Image Info Alternative"
+    },
+    "language": {
+      "desc": "Lobe Theme language",
+      "title": "Language"
+    },
+    "logoType": {
+      "desc": "Logo Type",
+      "preview": "Preview",
+      "title": "Logo Type"
+    },
+    "neutralColor": {
+      "desc": "Tint of the greys used for backgrounds and borders. Pick a preset, or any tint with Custom.",
+      "title": "Neutral Color"
+    },
+    "primaryColor": {
+      "desc": "Accent colour of buttons, links and highlights. Pick a preset, or any colour with Custom.",
+      "title": "Primary Color"
+    },
+    "promptDisplayMode": {
+      "desc": "Fixed height or auto height with draggable resize support",
+      "resizable": "Resizable",
+      "scroll": "Scroll",
+      "title": "Prompt Display Mode"
+    },
+    "promptEditor": {
+      "desc": "Provide a simple prompt editor at the top of the quick setting sidebar",
+      "title": "Prompt Editor"
+    },
+    "promptHighlight": {
+      "desc": "Automatically colorize prompt display according to the Stable Diffusion syntax rules",
+      "title": "Prompt Syntax Highlighting"
+    },
+    "quickSettingSidebar": {
+      "defaultExpand": {
+        "desc": "Whether to expand the sidebar by default when starting",
+        "title": "Default Expand"
+      },
+      "defaultWidth": {
+        "desc": "Default width of the sidebar when starting",
+        "title": "Default Width"
+      },
+      "displayMode": {
+        "desc": "Fixed as grid mode for constant display, auto-expand when the mouse moves to the side in floating mode",
+        "title": "Display Mode"
+      },
+      "enable": {
+        "desc": "Enable the quick setting sidebar on the left side",
+        "title": "Enable"
+      }
+    },
+    "reduceAnimation": {
+      "desc": "Reduce the blur effect and background flow color, which can improve smoothness and save CPU usage",
+      "title": "Reduce Animation"
+    },
+    "splitPreviewer": {
+      "desc": "Put the prompt input box on the left and the generate button on the right, ensuring that the generated image is always displayed at the top when scrolling (experimental)",
+      "title": "Split Previewer"
+    },
+    "svgIcons": {
+      "desc": "Replace all Emoji icons in stable diffusion webui with SVG icons globally",
+      "title": "SVG Icons"
+    },
+    "tab": {
+      "appearance": "Appearance",
+      "experimental": "Experimental",
+      "layout": "Layout",
+      "sidebar": "Sidebar",
+      "tools": "Tools"
+    },
+    "commandPalette": {
+      "title": "Command palette",
+      "desc": "Press Ctrl+K (⌘K on Mac) to search and run actions, tabs, samplers, checkpoints, LoRAs, presets, history and WebUI settings"
+    },
+    "history": {
+      "title": "Generation history",
+      "desc": "Keep every txt2img and img2img result with its parameters and a thumbnail, stored in the extension's lobe_data folder"
+    },
+    "presets": {
+      "title": "Parameter presets",
+      "desc": "A Presets panel in the left sidebar to save and apply sampler, steps, CFG, size and hires fix settings"
+    },
+    "loraTools": {
+      "title": "LoRA card tools",
+      "desc": "Favorites, a weight per LoRA, model family badges, trigger words and filters on LoRA cards"
+    },
+    "tabProgress": {
+      "title": "Progress on tab icon",
+      "desc": "A progress ring on the tab icon while generating, and a check mark when a background tab finishes"
+    },
+    "notification": {
+      "title": "Desktop notification",
+      "desc": "Notify when a generation finishes while the page is in the background (the browser asks for permission)"
+    },
+    "localAssets": {
+      "title": "Local assets",
+      "desc": "Load the logo, icons and fonts from the extension instead of a CDN, so the theme works without internet access"
+    },
+    "customColor": "Custom",
+    "resetColor": "Reset"
+  },
+  "share": "Share",
+  "shareModal": {
+    "download": "Download Screenshot",
+    "imageType": "Image Format",
+    "info": "Image Info",
+    "screenshot": "Screenshot",
+    "settings": "Export Settings",
+    "showAllImages": "Show All Images",
+    "showConfig": "Show Generate Config",
+    "showNegative": "Show Negative Promot",
+    "tabs": {
+      "info": "Info",
+      "settings": "Settings"
+    },
+    "title": "Image Name",
+    "warn": "Please Generate Image First",
+    "withBackground": "Include Background Image",
+    "withFooter": "Include Footer"
+  },
+  "sidebar": {
+    "extraNetwork": "Extra Network",
+    "mode": {
+      "fixed": "Fixed",
+      "float": "Float"
+    },
+    "quickSetting": "Quick Setting",
+    "presets": "Presets"
+  },
+  "tools": {
+    "palette": {
+      "placeholder": "Search actions, tabs, settings, LoRAs, presets…",
+      "empty": "No matches",
+      "hint": "↑ ↓ move · Enter run · Esc close",
+      "groups": {
+        "action": "Actions",
+        "tab": "Tabs",
+        "preset": "Presets",
+        "sampler": "Samplers",
+        "scheduler": "Schedule types",
+        "checkpoint": "Checkpoints",
+        "lora": "LoRAs",
+        "history": "History",
+        "setting": "WebUI settings"
+      },
+      "generate": "Generate",
+      "interrupt": "Interrupt",
+      "skip": "Skip",
+      "toggleTheme": "Switch light/dark theme",
+      "themeSettings": "Theme settings",
+      "openHistory": "Generation history",
+      "openPresets": "Presets",
+      "savePreset": "Save current parameters as a preset",
+      "setSampler": "Use sampler",
+      "setScheduler": "Use schedule type",
+      "loadCheckpoint": "Load checkpoint",
+      "addLora": "Add to prompt",
+      "applyPreset": "Apply preset",
+      "reuse": "Reuse parameters",
+      "openSetting": "Open setting"
+    },
+    "history": {
+      "title": "Generation history",
+      "search": "Search prompts and parameters",
+      "all": "All",
+      "empty": "Nothing here yet. Finished txt2img and img2img generations appear here.",
+      "loadMore": "Load more",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "reuseAll": "Reuse all",
+      "reusePrompt": "Prompt",
+      "reuseSeed": "Seed",
+      "copy": "Copy parameters",
+      "copied": "Copied",
+      "savePreset": "Save as preset",
+      "delete": "Delete",
+      "clear": "Clear history",
+      "clearConfirm": "Delete all history entries? Images already saved on disk are kept.",
+      "compare": "Compare",
+      "compareHint": "Tick two entries to compare them",
+      "applied": "Parameters applied",
+      "prompt": "Prompt",
+      "negative": "Negative prompt",
+      "parameter": "Parameter",
+      "onlyIn": "Only in {{name}}",
+      "images": "{{count}} images"
+    },
+    "presets": {
+      "title": "Presets",
+      "empty": "No presets yet. Set the parameters you like, then save them here.",
+      "name": "Preset name",
+      "save": "Save current",
+      "includeSeed": "Include seed",
+      "includeBatch": "Include batch count and size",
+      "apply": "Apply",
+      "applied": "Preset applied",
+      "rename": "Rename",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this preset?",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "overwrite": "Overwrite with current parameters",
+      "saved": "Preset saved",
+      "defaultName": "Preset {{n}}",
+      "for": "For {{tab}}"
+    },
+    "lora": {
+      "all": "All",
+      "favorites": "Favorites",
+      "recent": "Recent",
+      "compatible": "Compatible",
+      "favorite": "Favorite",
+      "weight": "Weight (scroll to adjust, click to reset)",
+      "triggerWords": "Add trigger words"
+    },
+    "notify": {
+      "done": "Generation finished"
+    }
+  }
+}
