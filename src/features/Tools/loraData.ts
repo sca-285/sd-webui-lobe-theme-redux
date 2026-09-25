@@ -3,11 +3,41 @@ import { $, webuiOption } from '@/scripts/webui';
 
 import { type Arch, type LoraInfo, getLoras, getModel, userdata } from './api';
 
+export const ARCH_LABEL: Record<Arch, string> = {
+  anima: 'Anima',
+  ernie: 'Ernie',
+  flux: 'Flux',
+  klein: 'Klein',
+  krea: 'Krea',
+  lumina: 'Lumina',
+  pid: 'PiD',
+  qwen: 'Qwen',
+  sd: 'SD1',
+  sd2: 'SD2',
+  sd3: 'SD3',
+  unknown: '',
+  wan: 'Wan',
+  xl: 'XL',
+  zit: 'Z-Image',
+};
+
 let loraPromise: Promise<Map<string, LoraInfo>> | undefined;
+
+// names an older theme server used for the same families
+const LEGACY_ARCH: Record<string, Arch> = { sd1: 'sd', sdxl: 'xl' };
+
+/** A family name from the server, in the names used here ('unknown' if not one of them). */
+export const normalizeArch = (value: unknown): Arch => {
+  const text = String(value ?? '').toLowerCase();
+  const arch = LEGACY_ARCH[text] ?? text;
+  return arch in ARCH_LABEL ? (arch as Arch) : 'unknown';
+};
 
 export const loadLoras = (force = false) => {
   if (!loraPromise || force) {
-    loraPromise = getLoras().then((list) => new Map(list.map((item) => [item.name, item])));
+    loraPromise = getLoras().then(
+      (list) => new Map(list.map((item) => [item.name, { ...item, arch: normalizeArch(item.arch) }])),
+    );
   }
   return loraPromise;
 };
@@ -74,23 +104,6 @@ export const weightOf = (name: string) => lists?.weights[name] ?? defaultWeight(
 
 export const formatWeight = (weight: number) => String(Math.round(weight * 100) / 100);
 
-export const ARCH_LABEL: Record<Arch, string> = {
-  anima: 'Anima',
-  ernie: 'Ernie',
-  flux: 'Flux',
-  klein: 'Klein',
-  krea: 'Krea',
-  lumina: 'Lumina',
-  pid: 'PiD',
-  qwen: 'Qwen',
-  sd: 'SD1',
-  sd2: 'SD2',
-  sd3: 'SD3',
-  unknown: '',
-  wan: 'Wan',
-  xl: 'XL',
-  zit: 'Z-Image',
-};
 
 const PRESETS = new Set<string>(Object.keys(ARCH_LABEL).filter((key) => key !== 'unknown'));
 
@@ -109,7 +122,7 @@ export const currentArch = async(): Promise<Arch> => {
   const preset = presetValue();
   if (PRESETS.has(preset)) return preset as Arch;
   const model = await getModel();
-  return model.arch;
+  return normalizeArch(model.arch);
 };
 
 export const isCompatible = (lora: Arch | undefined, model: Arch) => {
