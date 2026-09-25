@@ -423,10 +423,10 @@ A **Presets** tab in the left sidebar. **Save current** stores the sampler, sche
 On the LoRA cards of the Extra Networks sidebar:
 
 - a ☆ to mark favourites;
-- a badge with the model family the LoRA was trained for (SD1, SD2, XL, SD3, FLUX), red when it does not match the loaded model;
+- a badge with the model family the LoRA was trained for, red when it does not match the loaded model. The families follow Forge Classic (Neo)'s UI presets: SD1, XL, Flux, Klein (Flux.2), Qwen, Lumina, Z-Image, Wan, Anima, Ernie, PiD and Krea, plus SD2 and SD3 on the WebUIs that load them. The family is taken, in this order, from the **Preset** set in the card's metadata editor, from the trainer's metadata in the file, and from the LoRA's layer names and sizes;
 - on hover, a weight control: <kbd>−</kbd> / <kbd>+</kbd> or the mouse wheel. The weight is remembered per LoRA, used when the card is clicked, and updates the LoRA's tag if it is already in the prompt. Click the number to go back to the default;
 - a tag button that adds the LoRA's trigger words (from its "Activation text", a Civitai `.civitai.info` file, or its most frequent training tags);
-- a filter bar: **All**, **Favorites**, **Recent**, **Compatible** with the loaded model.
+- a filter bar: **All**, **Favorites**, **Recent**, **Compatible** with the loaded model. On Forge and Neo, **Compatible** follows the **UI Preset** as it changes.
 
 <div align="right">
 
