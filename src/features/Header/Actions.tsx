@@ -1,13 +1,14 @@
 import { ActionIcon } from '@lobehub/ui';
 import { Space } from 'antd';
 import { useResponsive } from 'antd-style';
-import { Github, LayoutGrid, LucideIcon, Moon, Settings, Sun } from 'lucide-react';
+import { Command, Github, History, LayoutGrid, LucideIcon, Moon, Settings, Sun } from 'lucide-react';
 import qs from 'query-string';
-import { memo, useCallback, useState } from 'react';
+import isEqual from 'fast-deep-equal';
+import { Suspense, lazy, memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Giscus } from '@/components';
-import Setting from '@/features/Setting';
+import { bus } from '@/features/Tools/bus';
 import { selectors, useAppStore } from '@/store';
 
 const CivitaiLogo: LucideIcon | any = ({ size }: any) => (
@@ -16,22 +17,44 @@ const CivitaiLogo: LucideIcon | any = ({ size }: any) => (
   </svg>
 );
 
+// The settings panel (and antd's form machinery it needs) loads the first
+// time it is opened, not with the page.
+const Setting = lazy(() => import('@/features/Setting'));
+
 interface ActionsProps {
   themeMode: 'dark' | 'light';
 }
 
 const Actions = memo<ActionsProps>(() => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [settingLoaded, setSettingLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const themeMode = useAppStore(selectors.themeMode);
+  const onSetThemeMode = useAppStore((st) => st.onSetThemeMode);
   const { mobile } = useResponsive();
   const { t } = useTranslation();
+  const setting = useAppStore(selectors.currentSetting, isEqual);
 
+  useEffect(
+    () =>
+      bus.on('open:settings', () => {
+        setSettingLoaded(true);
+        setIsSettingOpen(true);
+      }),
+    [],
+  );
+
+  // Switch in place: Gradio's own colours follow the `dark` class on <body>,
+  // the theme's follow the store. Only the URL is updated (so a reload keeps
+  // the choice) - the page used to reload, rebuilding the whole WebUI.
   const handleSetTheme = useCallback(() => {
     const theme = themeMode === 'light' ? 'dark' : 'light';
+    document.body.classList.remove('dark', 'light');
+    document.body.classList.add(theme);
+    onSetThemeMode(theme);
     const gradioURL = qs.parseUrl(window.location.href);
     gradioURL.query.__theme = theme;
-    window.location.replace(qs.stringifyUrl(gradioURL));
+    window.history.replaceState(window.history.state, '', qs.stringifyUrl(gradioURL));
   }, [themeMode]);
 
   return (
@@ -56,6 +79,16 @@ const Actions = memo<ActionsProps>(() => {
             />
           </>
         )}
+        {setting.enableCommandPalette && !mobile && (
+          <ActionIcon
+            icon={Command}
+            onClick={() => bus.emit('open:palette')}
+            title={t('header.commandPalette')}
+          />
+        )}
+        {setting.enableHistory && (
+          <ActionIcon icon={History} onClick={() => bus.emit('open:history')} title={t('header.history')} />
+        )}
         <ActionIcon
           icon={themeMode === 'light' ? Sun : Moon}
           onClick={handleSetTheme}
@@ -63,11 +96,18 @@ const Actions = memo<ActionsProps>(() => {
         />
         <ActionIcon
           icon={Settings}
-          onClick={() => setIsSettingOpen(true)}
+          onClick={() => {
+            setSettingLoaded(true);
+            setIsSettingOpen(true);
+          }}
           title={t('header.setting')}
         />
       </Space.Compact>
-      <Setting onCancel={() => setIsSettingOpen(false)} open={isSettingOpen} />
+      {settingLoaded && (
+        <Suspense fallback={null}>
+          <Setting onCancel={() => setIsSettingOpen(false)} open={isSettingOpen} />
+        </Suspense>
+      )}
       <Giscus onCancel={() => setIsModalOpen(false)} open={isModalOpen} />
     </>
   );

@@ -1,40 +1,29 @@
-import { TabsNavProps } from '@lobehub/ui';
 import { consola } from 'consola';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useSelectorHide } from '@/hooks/useSelectorHide';
 
-import { genNavList, getNavButtons } from './genNavList';
+import { type NavItem, genNavList, getNavButtons } from './genNavList';
 
-export const useNavBar = (mobile?: boolean) => {
-  const [items, setItems] = useState<TabsNavProps['items']>([]);
-  const navList = useMemo(() => genNavList(), []);
-  const onChange: TabsNavProps['onChange'] = useCallback(
-    (id: string) => {
-      consola.debug('🤯 [nav] onClick', id);
-      const index = navList.find((nav) => nav.id === id)?.index || 0;
-      const buttonList = getNavButtons();
-      buttonList[index].click();
-    },
-    [navList],
-  );
-  useSelectorHide('#tabs > .tab-nav:first-of-type');
-  useEffect(() => {
+export const useNavBar = (): { list: NavItem[]; onChange: (id: string) => void } => {
+  const list = useMemo(() => {
     try {
-      const list: TabsNavProps['items'] = navList.map((item) => {
-        return {
-          key: item.id,
-          label: mobile ? <div onClick={() => onChange(item.id)}>{item.label}</div> : item.label,
-        };
-      });
-      setItems(list.filter(Boolean));
+      const items = genNavList();
       consola.success('🤯 [layout] inject - Header');
+      return items;
     } catch (error) {
       consola.error('🤯 [layout] inject - Header', error);
+      return [];
     }
-  }, [mobile]);
-  return {
-    items,
-    onChange,
-  };
+  }, []);
+  const onChange = useCallback(
+    (id: string) => {
+      consola.debug('🤯 [nav] onClick', id);
+      const index = list.find((nav) => nav.id === id)?.index ?? 0;
+      getNavButtons()[index]?.click();
+    },
+    [list],
+  );
+  useSelectorHide('#tabs > .tab-nav:first-of-type');
+  return { list, onChange };
 };

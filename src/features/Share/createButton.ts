@@ -8,3 +8,14 @@ export const createButton = (type: string, setOpen: (open: boolean) => void): HT
   button.addEventListener('click', () => setOpen(true));
   return button;
 };
+
+/**
+ * Give an injected button the classes of its neighbours. Gradio scopes button
+ * styles with a per-version svelte class; copying it from a sibling tool
+ * button keeps the injected one identical on Gradio 3 and 4.
+ */
+export const adoptButtonClass = (button: HTMLButtonElement | null, container: Element) => {
+  if (!button) return;
+  const sibling = container.querySelector('button.gradio-button.tool') as HTMLButtonElement | null;
+  if (sibling) button.className = sibling.className.replace(/\bhidden\b/, '').trim();
+};

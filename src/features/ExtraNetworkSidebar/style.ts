@@ -269,7 +269,7 @@ export const useStyles = createStyles(
       div#img2img_extra_networks {
         display: block !important;
 
-        .tabitem.gradio-tabitem.svelte-19hvt5v {
+        .tabitem.gradio-tabitem {
           padding: 0 !important;
           background: transparent;
         }

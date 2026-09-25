@@ -1,22 +1,62 @@
 import { Form, Swatches } from '@lobehub/ui';
-import { Input, Segmented, Select, Switch } from 'antd';
+import { Button, ColorPicker, Input, Segmented, Select, Switch } from 'antd';
 import isEqual from 'fast-deep-equal';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Flexbox } from 'react-layout-kit';
 
 import { CustomLogo } from '@/components';
 import { type WebuiSetting, selectors, useAppStore } from '@/store';
+
+import { isHexColor } from '@/styles/colorScale';
 
 import {
   type NeutralColor,
   type PrimaryColor,
   findCustomThemeName,
-  neutralColors,
   neutralColorsSwatches,
-  primaryColors,
   primaryColorsSwatches,
+  settingColor,
 } from './data';
 import { SettingItemGroup } from './types';
+
+interface ColorChooserProps {
+  onChange: (value?: string) => void;
+  type: 'primary' | 'neutral';
+  value?: string;
+}
+
+/** Preset swatches, plus a picker for any other colour. */
+const ColorChooser = memo<ColorChooserProps>(({ type, value, onChange }) => {
+  const { t } = useTranslation();
+  const shown = settingColor(type, value);
+  return (
+    <Flexbox align={'flex-end'} gap={10} style={{ maxWidth: 380 }}>
+      <Flexbox horizontal justify={'flex-end'} wrap={'wrap'}>
+        <Swatches
+          activeColor={shown}
+          colors={type === 'primary' ? primaryColorsSwatches : neutralColorsSwatches}
+          onSelect={(c) => onChange(findCustomThemeName(type, c))}
+          size={22}
+        />
+      </Flexbox>
+      <Flexbox align={'center'} gap={8} horizontal>
+        <ColorPicker
+          disabledAlpha
+          onChangeComplete={(color) => onChange(color.toHexString())}
+          showText={() => t('setting.customColor')}
+          size={'small'}
+          value={isHexColor(value) ? value : shown || '#888888'}
+        />
+        {value && (
+          <Button onClick={() => onChange(undefined)} size={'small'} type={'text'}>
+            {t('setting.resetColor')}
+          </Button>
+        )}
+      </Flexbox>
+    </Flexbox>
+  );
+});
 
 const SettingForm = memo(() => {
   const setting = useAppStore(selectors.currentSetting, isEqual);
@@ -60,22 +100,14 @@ const SettingForm = memo(() => {
         },
         {
           children: (
-            <Swatches
-              activeColor={primaryColor ? primaryColors[primaryColor] : undefined}
-              colors={primaryColorsSwatches}
-              onSelect={(c) => setPrimaryColor(findCustomThemeName('primary', c))}
-            />
+            <ColorChooser onChange={setPrimaryColor} type={'primary'} value={primaryColor} />
           ),
           desc: t('setting.primaryColor.desc'),
           label: t('setting.primaryColor.title'),
         },
         {
           children: (
-            <Swatches
-              activeColor={neutralColor ? neutralColors[neutralColor] : undefined}
-              colors={neutralColorsSwatches}
-              onSelect={(c) => setNeutralColor(findCustomThemeName('neutral', c))}
-            />
+            <ColorChooser onChange={setNeutralColor} type={'neutral'} value={neutralColor} />
           ),
           desc: t('setting.neutralColor.desc'),
           label: t('setting.neutralColor.title'),

@@ -11,10 +11,7 @@ import Actions from './Actions';
 import Nav from './Nav';
 
 const Header = memo<DivProps>(({ children }) => {
-  const { themeMode, version } = useAppStore((st) => ({
-    themeMode: st.themeMode,
-    version: st.version,
-  }));
+  const themeMode = useAppStore((st) => st.themeMode);
   const theme = useTheme();
 
   return (
@@ -28,7 +25,7 @@ const Header = memo<DivProps>(({ children }) => {
           style={{ alignItems: 'center', color: theme.colorText, display: 'flex' }}
           target="_blank"
         >
-          <Tooltip title={`LobeTheme v${version}`}>
+          <Tooltip title={'Lobe Theme Redux'}>
             <Logo />
           </Tooltip>
         </a>

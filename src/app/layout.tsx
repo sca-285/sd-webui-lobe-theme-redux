@@ -35,7 +35,7 @@ export const Layout = memo<PropsWithChildren>(({ children }) => {
     onInit();
     onUiLoaded(() => {
       setLoading(false);
-      consola.success('🤯 Lobe Theme loading');
+      consola.success('🤯 Lobe Theme Redux loading');
     });
     onUiTabChange(() => {
       setCurrentTab();

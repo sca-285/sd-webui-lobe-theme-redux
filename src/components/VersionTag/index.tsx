@@ -1,31 +1,13 @@
 import { Tag, TagProps } from 'antd';
 import { memo } from 'react';
-import semver from 'semver';
 
-import { GITHUB_REPO_URL } from '@/const/url';
-import { useAppStore } from '@/store';
+/** This edition's name. Redux has no release numbers of its own. */
+export const EDITION = 'Redux';
 
-const VersionTag = memo<TagProps>((props) => {
-  const { version, latestVersion } = useAppStore((st) => ({
-    latestVersion: st.latestVersion,
-    version: st.version,
-  }));
-
-  const isLatest = semver.gte(version, latestVersion);
-
-  return (
-    <a href={GITHUB_REPO_URL} rel="noreferrer" target="_blank">
-      {isLatest ? (
-        <Tag color="success" {...props}>
-          v{version}
-        </Tag>
-      ) : (
-        <Tag color="warning" {...props}>
-          v{version} / latest v{latestVersion}
-        </Tag>
-      )}
-    </a>
-  );
-});
+const VersionTag = memo<TagProps>((props) => (
+  <Tag color="success" {...props}>
+    {EDITION}
+  </Tag>
+));
 
 export default VersionTag;

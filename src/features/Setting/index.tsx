@@ -8,6 +8,7 @@ import FormExperimental from './Form/Experimental';
 import Footer from './Form/Footer';
 import FormLayout from './Form/Layout';
 import FormSidebar from './Form/Sidebar';
+import FormTools from './Form/Tools';
 import Sidebar, { MobileSidebar, SettingsTabs } from './Sidebar';
 
 export interface SettingProps {
@@ -25,6 +26,7 @@ const Setting = memo<SettingProps>(({ open, onCancel }) => {
       {tab === SettingsTabs.Appearance && <FormAppearance />}
       {tab === SettingsTabs.Layout && <FormLayout />}
       {tab === SettingsTabs.Sidebar && <FormSidebar />}
+      {tab === SettingsTabs.Tools && <FormTools />}
       {tab === SettingsTabs.Experimental && <FormExperimental />}
     </>
   );

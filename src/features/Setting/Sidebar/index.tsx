@@ -12,6 +12,7 @@ export enum SettingsTabs {
   Experimental = 'experimental',
   Layout = 'layout',
   Sidebar = 'sidebar',
+  Tools = 'tools',
 }
 
 interface SidebarProps {
