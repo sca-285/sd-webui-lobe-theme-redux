@@ -214,7 +214,15 @@
       "desc": "Load the logo, icons and fonts from the extension instead of a CDN, so the theme works without internet access"
     },
     "customColor": "Custom",
-    "resetColor": "Reset"
+    "resetColor": "Reset",
+    "imageButtonsTop": {
+      "title": "Image buttons under Generate",
+      "desc": "Moves the image buttons (open folder, save, zip, send to img2img, inpaint, extras...) from under the gallery to right under Generate / Interrupt / Skip"
+    },
+    "sizeTools": {
+      "title": "Aspect ratios and suggested settings",
+      "desc": "Under Width and Height: aspect ratios at a base size that follows the model, a ratio lock, and steps / CFG scale suited to the loaded model"
+    }
   },
   "share": "Share",
   "shareModal": {
@@ -332,6 +340,17 @@
     },
     "notify": {
       "done": "Generation finished"
+    },
+    "size": {
+      "ratio": "Ratio",
+      "base": "Base",
+      "auto": "Auto",
+      "lock": "Keep this shape while a slider moves",
+      "suggested": "Suggested",
+      "noSuggestions": "No suggestions for this model family",
+      "steps": "steps",
+      "cfg": "CFG",
+      "distilled": "Distilled CFG"
     }
   }
 }
