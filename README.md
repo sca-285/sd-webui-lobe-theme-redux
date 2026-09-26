@@ -100,7 +100,7 @@ If you prefer to manage extensions using Git, you can clone the repository to yo
 - Run the following command in the command line to clone the repository:
 
 ```shell
-git clone "https://github.com/sca-285/sd-webui-lobe-theme-redux.git"
+git clone "https://github.com/lobehub/sd-webui-lobe-theme" extensions/lobe-theme
 ```
 
 > Once you have completed these steps, the Lobe Theme extension will be successfully installed in Stable Diffusion WebUI.
@@ -447,6 +447,33 @@ While a generation runs, the tab icon shows a progress ring. When it finishes wh
 #### `17` Works Offline
 
 The logo, favicons and web fonts ship with the extension (`assets/`) and are served by the WebUI itself, so the theme looks the same without internet access. Chinese and Japanese UIs still load the large CJK web font from the CDN when it is reachable, and fall back to system fonts otherwise.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+#### `18` Image Buttons Under Generate
+
+The row of image buttons (open folder, save, zip, send to img2img, inpaint and extras, and those extensions add) sits right under **Generate / Interrupt / Skip** instead of under the gallery, in txt2img and img2img, with or without the split previewer. **Theme Settings → Layout → Image buttons under Generate** puts it back.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+#### `19` Aspect Ratios and Suggested Settings
+
+Under **Width** and **Height**, in txt2img and img2img:
+
+- **Ratio**: 1:1, 4:5, 3:4, 2:3, 9:16, 9:21, 5:4, 4:3, 3:2, 16:9, 21:9. A click sets a width and height of that shape with about the pixels of the **Base** size, on the sliders' own step; the tooltip shows the size first. At 1024 these are the sizes SDXL-class models were trained on (1344 × 768 for 16:9, 832 × 1216 for 2:3...). The shape that matches the sliders is highlighted.
+- 🔒 keeps the current shape: moving one slider moves the other.
+- **Base**: **Auto** follows the loaded model (512 for SD1, 768 for SD2, 1024 for the rest), or pick 512, 768, 1024 or 1536.
+- **Suggested**: steps and CFG scale for the loaded model's family (SD1, SD2, XL, SD3, Flux, Krea, Qwen, Lumina, Z-Image), and for the fast variants named in the checkpoint (Lightning, Turbo, LCM, Hyper, DMD2, Schnell). On Forge and Neo, the Flux suggestions also set **Distilled CFG Scale**. The family follows Forge's **UI Preset** and the checkpoint as they change.
+
+**Theme Settings → Tools → Aspect ratios and suggested settings** turns them off.
 
 <div align="right">
 
