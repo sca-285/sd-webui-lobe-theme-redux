@@ -208,6 +208,19 @@ export const startSizeTools = ({ colors, text }: { colors: { border: string; fil
     setInputValue(numberInput(`${tab}_height`), String(height));
   };
 
+  // A new base size resizes the image at once, keeping its shape: the listed
+  // shape it is closest to (for the trained sizes), else its own.
+  const resizeToBase = (tab: GenTab) => {
+    const w = readNumber(`${tab}_width`);
+    const h = readNumber(`${tab}_height`);
+    if (!w || !h) return;
+    const shape: Ratio = locked[tab]
+      || RATIOS.find(([rw, rh]) => Math.abs(Math.log(w / h / (rw / rh))) < 0.03)
+      || [w, h];
+    const [nw, nh] = sizeFor(shape, baseOf(tab), sliderStep(tab), sliderMax(tab));
+    setSize(tab, nw, nh);
+  };
+
   const currentRatio = (tab: GenTab) => {
     const w = readNumber(`${tab}_width`);
     const h = readNumber(`${tab}_height`);
@@ -305,7 +318,8 @@ export const startSizeTools = ({ colors, text }: { colors: { border: string; fil
     for (const value of [0, ...BASES]) {
       const button = chip(value ? String(value) : text.auto, value ? `${value} × ${value}` : text.auto, () => {
         baseChoice[tab] = value;
-        drawAll();
+        resizeToBase(tab);
+        setTimeout(() => drawAll(), 50);
       });
       button.dataset.base = String(value);
       base.append(button);
