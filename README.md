@@ -470,7 +470,7 @@ Under **Width** and **Height**, in txt2img and img2img:
 
 - **Ratio**: 1:1, 4:5, 3:4, 2:3, 9:16, 9:21, 5:4, 4:3, 3:2, 16:9, 21:9. A click sets a width and height of that shape with about the pixels of the **Base** size, on the sliders' own step; the tooltip shows the size first. At 1024 these are the sizes SDXL-class models were trained on (1344 × 768 for 16:9, 832 × 1216 for 2:3...). The shape that matches the sliders is highlighted.
 - 🔒 keeps the current shape: moving one slider moves the other.
-- **Base**: **Auto** follows the loaded model (512 for SD1, 768 for SD2, 1024 for the rest), or pick 512, 768, 1024 or 1536.
+- **Base**: how many pixels the image has, about base × base. **Auto** follows the loaded model (512 for SD1, 768 for SD2, 1024 for the rest), or pick 512, 768, 1024 or 1536. Choosing a base resizes the image at once and keeps its shape.
 - **Suggested**: steps and CFG scale for the loaded model's family (SD1, SD2, XL, SD3, Flux, Krea, Qwen, Lumina, Z-Image), and for the fast variants named in the checkpoint (Lightning, Turbo, LCM, Hyper, DMD2, Schnell). On Forge and Neo, the Flux suggestions also set **Distilled CFG Scale**. The family follows Forge's **UI Preset** and the checkpoint as they change.
 
 **Theme Settings → Tools → Aspect ratios and suggested settings** turns them off.
