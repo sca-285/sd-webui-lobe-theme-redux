@@ -1,6 +1,7 @@
 /**
  * The theme's tools that are not tied to one panel: the progress hook, tab
- * progress, history capture, LoRA card tools, and the lazily loaded command
+ * progress, history capture, LoRA card tools, image buttons under Generate,
+ * aspect ratios and suggested settings, and the lazily loaded command
  * palette and history drawer.
  */
 import { useTheme } from 'antd-style';
@@ -13,7 +14,9 @@ import { selectors, useAppStore } from '@/store';
 import { bus } from './bus';
 import { startGenerationCapture } from './generation';
 import { installProgressHook } from './hook';
+import { startImageButtons } from './imageButtons';
 import { startLoraTools } from './loraTools';
+import { startSizeTools } from './sizeTools';
 import { startTabProgress } from './tabProgress';
 
 const CommandPalette = lazy(() => import('./CommandPalette'));
@@ -66,6 +69,29 @@ const Tools = memo(() => {
       },
     });
   }, [setting.enableLoraTools]);
+
+  useEffect(() => {
+    if (!setting.layoutImageButtonsTop) return;
+    return startImageButtons();
+  }, [setting.layoutImageButtonsTop]);
+
+  useEffect(() => {
+    if (!setting.enableSizeTools) return;
+    return startSizeTools({
+      colors: { border: theme.colorBorder, fill: theme.colorFillQuaternary, primary: theme.colorPrimary },
+      text: {
+        auto: t('tools.size.auto'),
+        base: t('tools.size.base'),
+        cfg: t('tools.size.cfg'),
+        distilled: t('tools.size.distilled'),
+        lock: t('tools.size.lock'),
+        noSuggestions: t('tools.size.noSuggestions'),
+        ratio: t('tools.size.ratio'),
+        steps: t('tools.size.steps'),
+        suggested: t('tools.size.suggested'),
+      },
+    });
+  }, [setting.enableSizeTools]);
 
   useEffect(() => {
     const offPalette = bus.on('open:palette', () => {
