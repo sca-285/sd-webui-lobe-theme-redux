@@ -15,6 +15,7 @@ export interface WebuiSetting {
   enableNotification: boolean;
   enablePresets: boolean;
   enableSidebar: boolean;
+  enableSizeTools: boolean;
   enableTabProgress: boolean;
   enableWebFont: boolean;
   extraNetworkCardSize: number;
@@ -23,6 +24,7 @@ export interface WebuiSetting {
   extraNetworkSidebarWidth: number;
   i18n: I18n;
   layoutHideFooter: boolean;
+  layoutImageButtonsTop: boolean;
   layoutSplitPreview: boolean;
   liteAnimation: boolean;
   localAssets: boolean;
@@ -52,6 +54,7 @@ export const DEFAULT_SETTING: WebuiSetting = {
   enableNotification: false,
   enablePresets: true,
   enableSidebar: true,
+  enableSizeTools: true,
   enableTabProgress: true,
   enableWebFont: true,
   extraNetworkCardSize: 86,
@@ -60,6 +63,7 @@ export const DEFAULT_SETTING: WebuiSetting = {
   extraNetworkSidebarWidth: 340,
   i18n: 'en_US',
   layoutHideFooter: false,
+  layoutImageButtonsTop: true,
   layoutSplitPreview: false,
   liteAnimation: true,
   localAssets: true,

@@ -33,6 +33,7 @@ const SettingForm = memo(() => {
         ['enableHistory', 'history'],
         ['enablePresets', 'presets'],
         ['enableLoraTools', 'loraTools'],
+        ['enableSizeTools', 'sizeTools'],
         ['enableTabProgress', 'tabProgress'],
         ['enableNotification', 'notification'],
         ['localAssets', 'localAssets'],

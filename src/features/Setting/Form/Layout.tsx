@@ -31,6 +31,13 @@ const SettingForm = memo(() => {
         },
         {
           children: <Switch />,
+          desc: t('setting.imageButtonsTop.desc'),
+          label: t('setting.imageButtonsTop.title'),
+          name: 'layoutImageButtonsTop',
+          valuePropName: 'checked',
+        },
+        {
+          children: <Switch />,
           desc: t('setting.hideFooter.desc'),
           label: t('setting.hideFooter.title'),
           name: 'layoutHideFooter',

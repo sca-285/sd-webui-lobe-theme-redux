@@ -93,7 +93,7 @@ export default (token: Theme) => {
     [id$='_gallery_container'] {
       min-height: 470px;
 
-      > div:not([id$='_generate_box']) {
+      > div:not([id$='_generate_box'], [id^='image_buttons_']) {
         flex-grow: 1;
 
         [id$='_gallery'] {
