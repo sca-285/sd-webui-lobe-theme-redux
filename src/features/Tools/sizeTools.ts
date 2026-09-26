@@ -33,8 +33,8 @@ const BASES = [512, 768, 1024, 1536];
 
 // The sizes SDXL-class models were trained on (width x height), by shape.
 const BUCKETS_1024: Record<string, [number, number]> = {
-  '1:1': [1024, 1024], '4:5': [896, 1152], '5:4': [1152, 896], '3:4': [896, 1152], '4:3': [1152, 896],
-  '2:3': [832, 1216], '3:2': [1216, 832], '9:16': [768, 1344], '16:9': [1344, 768], '9:21': [640, 1536], '21:9': [1536, 640],
+  '16:9': [1344, 768], '1:1': [1024, 1024], '21:9': [1536, 640], '2:3': [832, 1216], '3:2': [1216, 832],
+  '3:4': [896, 1152], '4:3': [1152, 896], '4:5': [896, 1152], '5:4': [1152, 896], '9:16': [768, 1344], '9:21': [640, 1536],
 };
 
 export interface Suggestion {
@@ -279,6 +279,13 @@ export const startSizeTools = ({ colors, text }: { colors: { border: string; fil
     }
   };
 
+  const drawAll = () => {
+    for (const panel of panels) {
+      drawRatios(panel);
+      drawSuggestions(panel);
+    }
+  };
+
   const build = (tab: GenTab) => {
     const height = $(`#${tab}_height`);
     if (!height || height.parentElement?.querySelector(':scope > .lobe-size')) return false;
@@ -354,13 +361,6 @@ export const startSizeTools = ({ colors, text }: { colors: { border: string; fil
       }
     }
     return true;
-  };
-
-  const drawAll = () => {
-    for (const panel of panels) {
-      drawRatios(panel);
-      drawSuggestions(panel);
-    }
   };
 
   const refreshModel = async() => {

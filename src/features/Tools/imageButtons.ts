@@ -23,12 +23,13 @@ const place = (tab: GenTab) => {
   return true;
 };
 
+const run = () => TABS.map(place);
+
 export const startImageButtons = () => {
   const style = document.createElement('style');
   style.id = 'lobe-image-buttons-style';
   style.textContent = CSS;
   document.head.append(style);
-  const run = () => TABS.map(place);
   run();
   // the split previewer moves the Generate box once the UI is up: follow it for a while
   let count = 0;
