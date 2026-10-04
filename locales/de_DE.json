@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Chaotische Seeds",
-      "toggle": "Jedes Generieren würfelt einen neuen Seed mit zufälliger Stellenzahl; das Seed-Feld wird übergangen",
+      "toggle": "Jedes Bild bekommt einen neuen Seed mit zufälliger Stellenzahl; das Seed-Feld wird übergangen",
       "digits": "Stellen",
-      "hint": "An: Jedes Generieren würfelt einen neuen Seed in diesem Bereich und ignoriert das Seed-Feld. Der verwendete Seed steht im Infotext; ♻️ holt ihn zurück."
+      "hint": "An: Jedes Bild bekommt einen neuen Seed in diesem Bereich, das Seed-Feld wird übergangen. Jeder Seed steht im Infotext; %reuse% holt ihn zurück."
     },
     "sections": {
       "add": "Abschnitt hinzufügen",

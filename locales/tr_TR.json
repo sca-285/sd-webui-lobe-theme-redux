@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Kaotik seed'ler",
-      "toggle": "Her Oluştur, basamak sayısı rastgele yeni bir seed çeker; Seed kutusu yok sayılır",
+      "toggle": "Her görsel, basamak sayısı rastgele yeni bir seed alır; Seed kutusu yok sayılır",
       "digits": "Basamak",
-      "hint": "Açık: her Oluştur bu aralıkta yeni bir seed çeker ve Seed kutusunu yok sayar. Kullanılan seed infotext'te yazar; ♻️ geri getirir."
+      "hint": "Açık: her görsel bu aralıkta yeni bir seed alır ve Seed kutusu yok sayılır. Her seed infotext'te yazar; %reuse% geri getirir."
     },
     "sections": {
       "add": "Bölüm ekle",

@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Seeds chaotiques",
-      "toggle": "Chaque génération tire une nouvelle seed au nombre de chiffres aléatoire ; le champ Seed est ignoré",
+      "toggle": "Chaque image reçoit une nouvelle seed au nombre de chiffres aléatoire ; le champ Seed est ignoré",
       "digits": "Chiffres",
-      "hint": "Activé : chaque génération tire une nouvelle seed dans cette plage et ignore le champ Seed. La seed utilisée figure dans l'infotext ; ♻️ la rappelle."
+      "hint": "Activé : chaque image reçoit une nouvelle seed dans cette plage et le champ Seed est ignoré. Chaque seed figure dans son infotext ; %reuse% la rappelle."
     },
     "sections": {
       "add": "Ajouter une section",

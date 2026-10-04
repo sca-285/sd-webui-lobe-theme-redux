@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Seeds caóticas",
-      "toggle": "Cada Gerar sorteia uma nova seed com número aleatório de dígitos; a caixa Seed é ignorada",
+      "toggle": "Cada imagem recebe uma nova seed com número aleatório de dígitos; a caixa Seed é ignorada",
       "digits": "Dígitos",
-      "hint": "Ligado: cada Gerar sorteia uma nova seed nesta faixa e ignora a caixa Seed. A seed usada fica no infotext; ♻️ a traz de volta."
+      "hint": "Ligado: cada imagem recebe uma nova seed nesta faixa e a caixa Seed é ignorada. Cada seed fica no seu infotext; %reuse% a traz de volta."
     },
     "sections": {
       "add": "Adicionar seção",

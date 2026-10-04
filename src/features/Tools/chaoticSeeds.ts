@@ -67,8 +67,13 @@ const CSS = `
 .lobe-chaos-chip.active { color: var(--lobe-chaos-on-primary, #fff) !important; background: var(--lobe-chaos-primary, #1677ff) !important; border-color: var(--lobe-chaos-primary, #1677ff) !important; }
 .lobe-chaos-digits { display: inline-flex; gap: 4px; align-items: center; font-size: 12px; }
 .lobe-chaos-digits > span { font-weight: 600; opacity: 0.7; }
-.lobe-chaos select { height: 26px; padding: 0 4px; font-size: 12px; color: inherit; background: transparent; border: 1px solid var(--lobe-chaos-border, rgb(128 128 128 / 30%)); border-radius: 6px; }
-.lobe-chaos select option { color: initial; }
+.lobe-chaos select { height: 26px; padding: 0 4px; font-size: 12px; color: var(--lobe-chaos-text, inherit); color-scheme: var(--lobe-chaos-scheme, normal); cursor: pointer;
+  background: var(--lobe-chaos-bg, transparent); border: 1px solid var(--lobe-chaos-border, rgb(128 128 128 / 30%)); border-radius: 6px; }
+.lobe-chaos select:hover, .lobe-chaos select:focus { border-color: var(--lobe-chaos-primary, #1677ff); outline: none; }
+/* the open list is drawn by the browser: give it the theme's colours, not the system's */
+.lobe-chaos select option { color: var(--lobe-chaos-text, inherit); background: var(--lobe-chaos-bg, Canvas); }
+.lobe-chaos select option:checked { color: var(--lobe-chaos-on-primary, #fff); background: var(--lobe-chaos-primary, #1677ff); }
+.lobe-chaos-hint svg { width: 12px; height: 12px; margin: 0 1px; vertical-align: -2px; }
 .lobe-chaos-hint { flex-basis: 100%; font-size: 11.5px; opacity: 0.65; }
 .lobe-chaos:not(.on) .lobe-chaos-hint { display: none; }
 .lobe-chaos-on[id$='_seed'] input, .lobe-chaos-on [id$='_seed'] input { opacity: 0.45; }
@@ -84,7 +89,15 @@ interface Panel {
   toggle: HTMLButtonElement;
 }
 
-export const startChaoticSeeds = ({ colors, text }: { colors: { border: string; fill: string; primary: string }; text: ChaoticSeedsText }) => {
+export const startChaoticSeeds = ({
+  colors,
+  dark,
+  text,
+}: {
+  colors: { bg: string; border: string; fill: string; primary: string; text: string };
+  dark: boolean;
+  text: ChaoticSeedsText;
+}) => {
   if (document.querySelector('#lobe-chaotic-seeds-style')) return () => undefined;
   const style = document.createElement('style');
   style.id = 'lobe-chaotic-seeds-style';
@@ -95,6 +108,9 @@ export const startChaoticSeeds = ({ colors, text }: { colors: { border: string; 
   rootStyle.setProperty('--lobe-chaos-on-primary', readableColor(colors.primary, '#111', '#fff', false));
   rootStyle.setProperty('--lobe-chaos-fill', colors.fill);
   rootStyle.setProperty('--lobe-chaos-border', colors.border);
+  rootStyle.setProperty('--lobe-chaos-bg', colors.bg);
+  rootStyle.setProperty('--lobe-chaos-text', colors.text);
+  rootStyle.setProperty('--lobe-chaos-scheme', dark ? 'dark' : 'light');
 
   const state = load();
   const panels: Panel[] = [];
@@ -114,6 +130,14 @@ export const startChaoticSeeds = ({ colors, text }: { colors: { border: string; 
     if (box && box.value !== value) setInputValue(box, value);
   };
 
+  // %reuse% in the hint is the Reuse seed button as this page shows it: the
+  // theme's icon, or the WebUI's ♻️ when icons are not replaced
+  const fillHint = (hint: HTMLElement, tab: GenTab) => {
+    const [before, after = ''] = text.hint.split('%reuse%');
+    const icon = $(`#${tab}_reuse_seed svg`)?.cloneNode(true) as SVGElement | undefined;
+    hint.replaceChildren(before, icon || ($(`#${tab}_reuse_seed`)?.textContent?.trim() || '♻️'), after);
+  };
+
   const draw = (panel: Panel) => {
     const { enabled, max, min } = state[panel.tab];
     panel.root.classList.toggle('on', enabled);
@@ -121,6 +145,8 @@ export const startChaoticSeeds = ({ colors, text }: { colors: { border: string; 
     panel.toggle.classList.toggle('active', enabled);
     panel.min.value = String(min);
     panel.max.value = String(max);
+    // drawn each time: the theme swaps the button's ♻️ for its icon after the page loads
+    if (enabled) fillHint(panel.hint, panel.tab);
   };
 
   const select = (value: number, onChange: (value: number) => void) => {
@@ -181,7 +207,6 @@ export const startChaoticSeeds = ({ colors, text }: { colors: { border: string; 
       draw(panel);
     });
     panel.hint.className = 'lobe-chaos-hint';
-    panel.hint.textContent = text.hint;
     digits.append(label, panel.min, dash, panel.max);
     root.append(toggle, digits, panel.hint);
     row.after(root);

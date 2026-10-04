@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Chaotic seeds",
-      "toggle": "Each Generate rolls a new seed with a random number of digits; the Seed box is skipped",
+      "toggle": "Every image gets a new seed with a random number of digits; the Seed box is skipped",
       "digits": "Digits",
-      "hint": "On: every Generate rolls a new seed in this range and ignores the Seed box. The seed used is in the infotext; ♻️ brings it back."
+      "hint": "On: every image gets a new seed in this range and the Seed box is skipped. Each seed is in its infotext; %reuse% brings it back."
     },
     "sections": {
       "add": "Add section",

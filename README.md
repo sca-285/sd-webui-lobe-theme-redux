@@ -798,7 +798,7 @@ Under **Seed**, in txt2img and img2img (the reForge *Chaotic Seeds* extension, b
 
 - 🎲 **Chaotic seeds** turns it on for that tab. For each image, the theme's script (`scripts/chaotic_seeds.py`) first picks a number of digits between **Digits** min and max, then a seed with that many digits: with 4–15, a 5-digit seed is as likely as a 15-digit one.
 - Every image of a batch gets its own seed, and so does **Variation seed** when its strength is above 0, so a batch does not all vary the same way.
-- The Seed box is skipped while it is on and keeps its value. Each image's seed is in its infotext, with `Chaotic seeds: 4-15`; ♻️ brings the seed back, and pasting the parameters (PNG Info, ↙️, history) turns the tool on with that range, or off when the key is missing.
+- The Seed box is skipped while it is on and keeps its value. Each image's seed is in its infotext, with `Chaotic seeds: 4-15`; the **Reuse seed** button next to Seed brings it back, and pasting the parameters (PNG Info, ↙️, history) turns the tool on with that range, or off when the key is missing.
 - The choice and the range are remembered per tab, in the browser. Through the API, the script takes one argument: `"4-15"` to turn it on, `""` for off.
 - Remove the old extension if it is installed, or both will roll.
 

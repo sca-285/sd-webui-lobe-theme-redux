@@ -149,7 +149,14 @@ const Tools = memo(() => {
   useEffect(() => {
     if (!setting.enableChaoticSeeds) return;
     return startChaoticSeeds({
-      colors: { border: theme.colorBorder, fill: theme.colorFillQuaternary, primary: theme.colorPrimary },
+      colors: {
+        bg: theme.colorBgElevated,
+        border: theme.colorBorder,
+        fill: theme.colorFillQuaternary,
+        primary: theme.colorPrimary,
+        text: theme.colorText,
+      },
+      dark: theme.isDarkMode,
       text: {
         digits: t('tools.chaotic.digits'),
         hint: t('tools.chaotic.hint'),
@@ -157,7 +164,7 @@ const Tools = memo(() => {
         toggle: t('tools.chaotic.toggle'),
       },
     });
-  }, [setting.enableChaoticSeeds]);
+  }, [setting.enableChaoticSeeds, theme.isDarkMode]);
 
   useEffect(() => {
     const offPalette = bus.on('open:palette', () => {

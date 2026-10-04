@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Semillas caóticas",
-      "toggle": "Cada Generar tira una semilla nueva con un número aleatorio de dígitos; se ignora la casilla Seed",
+      "toggle": "Cada imagen recibe una semilla nueva con un número aleatorio de dígitos; se ignora la casilla Seed",
       "digits": "Dígitos",
-      "hint": "Activado: cada Generar tira una semilla nueva en este rango e ignora la casilla Seed. La semilla usada queda en el infotext; ♻️ la recupera."
+      "hint": "Activado: cada imagen recibe una semilla nueva en este rango y se ignora la casilla Seed. Cada semilla queda en su infotext; %reuse% la recupera."
     },
     "sections": {
       "add": "Añadir sección",

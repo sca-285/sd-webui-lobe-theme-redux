@@ -458,9 +458,9 @@
     },
     "chaotic": {
       "title": "Seed hỗn loạn",
-      "toggle": "Mỗi lần Generate tung một seed mới với số chữ số ngẫu nhiên; bỏ qua ô Seed",
+      "toggle": "Mỗi ảnh được một seed mới với số chữ số ngẫu nhiên; bỏ qua ô Seed",
       "digits": "Chữ số",
-      "hint": "Đang bật: mỗi lần Generate tung một seed mới trong khoảng này và bỏ qua ô Seed. Seed đã dùng nằm trong infotext; ♻️ lấy lại nó."
+      "hint": "Đang bật: mỗi ảnh được một seed mới trong khoảng này và ô Seed bị bỏ qua. Seed của từng ảnh nằm trong infotext; %reuse% lấy lại nó."
     },
     "sections": {
       "add": "Thêm ô",
