@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "기타 모델",
         "process": "기타 프로세스"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "메모리 관리자의 VRAM 모드, 재시작 없이 전환; 재시작하면 WebUI 시작 시 모드로 돌아갑니다.",
+      "busyMode": "VRAM 모드 전환 중…",
+      "modeSet": "VRAM 모드: {{mode}}; 다음 생성 때 모델을 다시 배치합니다",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: 모델을 GPU에 그대로 두고 RAM으로 옮기지 않음",
+        "normal": "Normal: 들어가는 만큼 GPU에, 텍스트 인코더는 GPU",
+        "low": "Low: 들어가는 만큼 GPU에, 텍스트 인코더는 RAM"
+      },
+      "modeStartup": "WebUI가 이 모드로 시작됨"
     },
     "tabs": {
       "prompt": "프롬프트",

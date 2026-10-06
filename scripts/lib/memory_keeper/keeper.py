@@ -121,7 +121,9 @@ def gauges():
 
 
 def status(full=False):
-    out = {"gauges": gauges(), "generating": generating()}
+    from . import vram_mode
+
+    out = {"gauges": gauges(), "generating": generating(), "vram_mode": vram_mode.info()}
     if not full:
         return out
     kept = pins()

@@ -6,7 +6,7 @@
  * in its section, with 🔒 to keep it and buttons to move it to RAM or let it
  * go. The work is done by scripts/memory_keeper.py, at /lobe/memory.
  */
-import { Button } from 'antd';
+import { Button, Segmented } from 'antd';
 import { createStyles } from 'antd-style';
 import { ChevronDown, ChevronRight, Lock, LockOpen } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
@@ -62,7 +62,12 @@ export interface Status {
   generating: boolean;
   holders?: Holder[];
   pinned?: string[];
+  /** the memory manager's VRAM state: high / normal / low, or another state where the switch does not apply */
+  vram_mode?: { can: boolean; mode: string; startup: string | null } | null;
 }
+
+export type VramMode = 'high' | 'normal' | 'low';
+export const VRAM_MODES: VramMode[] = ['high', 'normal', 'low'];
 
 interface Freed {
   ram?: number;
@@ -219,6 +224,16 @@ const useStyles = createStyles(({ css, token }) => ({
     color: ${token.colorTextSecondary};
     background: ${token.colorFillTertiary};
     border-radius: ${token.borderRadiusSM}px;
+  `,
+  mode: css`
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-block-start: 2px;
+
+    .ant-segmented-item-label {
+      font-size: 12px;
+    }
   `,
   part: css`
     display: flex;
@@ -397,12 +412,19 @@ export const useMemoryKeeper = (enabled = true) => {
       report(r, category ? category.name : t(LEVEL_LABEL[level]));
     });
 
+  const setVramMode = (mode: VramMode) =>
+    doing(t('sidebar.memory.busyMode'), async() => {
+      const r = await call<{ done: string[]; skipped: string[] }>('/vram-mode', { mode });
+      const left = r.skipped?.length ? ` · ${t('sidebar.memory.left', { list: r.skipped.join(', ') })}` : '';
+      setMessage(`${t('sidebar.memory.modeSet', { mode: t(`sidebar.memory.modes.${mode}`) })}${left}`);
+    });
+
   const pin = (h: Holder) =>
     doing(' ', async() => {
       await call('/pin', { id: h.id, keep: !h.pinned });
     });
 
-  return { act, busy, free, full, message, missing, open, pin, setOpen, status };
+  return { act, busy, free, full, message, missing, open, pin, setOpen, setVramMode, status };
 };
 
 export type MemoryKeeperState = ReturnType<typeof useMemoryKeeper>;
@@ -436,7 +458,7 @@ export const MemoryControls = memo<{ legend?: boolean; mk: MemoryKeeperState }>(
   const { cx, styles, theme } = useStyles();
   const { t } = useTranslation();
   const colors = useMemoryColors();
-  const { act, busy, free, full, message, open, pin, setOpen, status } = mk;
+  const { act, busy, free, full, message, open, pin, setOpen, setVramMode, status } = mk;
   if (!status) return null;
 
   const catName = (key: string, fallback: string) => t(`sidebar.memory.categories.${key}` as any, { defaultValue: fallback }) as string;
@@ -525,6 +547,24 @@ export const MemoryControls = memo<{ legend?: boolean; mk: MemoryKeeperState }>(
   return (
     <>
       {legend && (status.gauges.gpu || status.gauges.ram) && <Legend colors={colors} />}
+      {status.vram_mode?.can && (
+        <div className={styles.mode} title={t('sidebar.memory.modeTip')}>
+          <span className={styles.label}>{t('sidebar.memory.mode')}</span>
+          <Segmented
+            block
+            disabled={Boolean(busy) || status.generating}
+            onChange={(value) => setVramMode(value as VramMode)}
+            options={VRAM_MODES.map((mode) => ({
+              label: t(`sidebar.memory.modes.${mode}`),
+              title: `${t(`sidebar.memory.modeTips.${mode}`)}${status.vram_mode?.startup === mode ? ` · ${t('sidebar.memory.modeStartup')}` : ''}`,
+              value: mode,
+            }))}
+            size={'small'}
+            style={{ flex: 1 }}
+            value={status.vram_mode.mode}
+          />
+        </div>
+      )}
       <div className={styles.buttons}>
         <Button disabled={Boolean(busy)} onClick={() => free('ram')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeRamTip')}>
           {t('sidebar.memory.freeRam')}

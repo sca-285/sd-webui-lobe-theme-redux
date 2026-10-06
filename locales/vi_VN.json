@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "Model khác",
         "process": "Tiến trình khác"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "Chế độ VRAM của trình quản lý bộ nhớ, đổi không cần khởi động lại; khởi động lại sẽ quay về chế độ lúc WebUI khởi động.",
+      "busyMode": "Đang đổi chế độ VRAM…",
+      "modeSet": "Chế độ VRAM: {{mode}}; lần tạo ảnh sau sẽ nạp lại model theo chế độ mới",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: model ở yên trên GPU, không đẩy về RAM",
+        "normal": "Normal: model lên GPU trong phạm vi vừa đủ, text encoder trên GPU",
+        "low": "Low: model lên GPU trong phạm vi vừa đủ, text encoder trong RAM"
+      },
+      "modeStartup": "WebUI khởi động ở chế độ này"
     },
     "tabs": {
       "prompt": "Prompt",

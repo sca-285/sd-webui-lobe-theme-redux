@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "その他のモデル",
         "process": "その他のプロセス"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "メモリマネージャーの VRAM モード。再起動なしで切り替え、再起動すると起動時のモードに戻ります。",
+      "busyMode": "VRAM モードを切り替え中…",
+      "modeSet": "VRAM モード：{{mode}}。次の生成でモデルを配置し直します",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High：モデルは GPU に置いたまま、RAM に戻しません",
+        "normal": "Normal：モデルは入る分だけ GPU、テキストエンコーダーは GPU",
+        "low": "Low：モデルは入る分だけ GPU、テキストエンコーダーは RAM"
+      },
+      "modeStartup": "WebUI はこのモードで起動"
     },
     "tabs": {
       "prompt": "プロンプト",

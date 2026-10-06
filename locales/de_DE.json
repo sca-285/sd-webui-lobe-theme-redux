@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "Andere Modelle",
         "process": "Andere Prozesse"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "VRAM-Modus der Speicherverwaltung, ohne Neustart umschaltbar; ein Neustart kehrt zum Startmodus zurück.",
+      "busyMode": "Wechsle VRAM-Modus…",
+      "modeSet": "VRAM-Modus: {{mode}}; die nächste Generierung platziert die Modelle neu",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: Modelle bleiben auf der GPU, nichts zurück in den RAM",
+        "normal": "Normal: Modelle auf der GPU, soweit sie passen; Text-Encoder auf der GPU",
+        "low": "Low: Modelle auf der GPU, soweit sie passen; Text-Encoder im RAM"
+      },
+      "modeStartup": "die WebUI startete in diesem Modus"
     },
     "tabs": {
       "prompt": "Prompt",

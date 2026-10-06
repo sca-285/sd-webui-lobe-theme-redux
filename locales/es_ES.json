@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "Otros modelos",
         "process": "Otros procesos"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "Modo de VRAM del gestor de memoria, se cambia sin reiniciar; al reiniciar vuelve al modo de arranque.",
+      "busyMode": "Cambiando el modo de VRAM…",
+      "modeSet": "Modo de VRAM: {{mode}}; la próxima generación vuelve a colocar los modelos",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: los modelos se quedan en la GPU",
+        "normal": "Normal: modelos en la GPU hasta donde quepan, codificador de texto en la GPU",
+        "low": "Low: modelos en la GPU hasta donde quepan, codificador de texto en RAM"
+      },
+      "modeStartup": "la WebUI arrancó en este modo"
     },
     "tabs": {
       "prompt": "Prompt",

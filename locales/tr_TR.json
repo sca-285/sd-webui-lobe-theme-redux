@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "Diğer modeller",
         "process": "Diğer süreçler"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "Bellek yöneticisinin VRAM modu, yeniden başlatmadan değişir; yeniden başlatınca başlangıç moduna döner.",
+      "busyMode": "VRAM modu değiştiriliyor…",
+      "modeSet": "VRAM modu: {{mode}}; sonraki üretim modelleri yeniden yerleştirir",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: modeller GPU'da kalır",
+        "normal": "Normal: modeller sığdığı kadar GPU'da, metin kodlayıcı GPU'da",
+        "low": "Low: modeller sığdığı kadar GPU'da, metin kodlayıcı RAM'de"
+      },
+      "modeStartup": "WebUI bu modda başladı"
     },
     "tabs": {
       "prompt": "İstek",

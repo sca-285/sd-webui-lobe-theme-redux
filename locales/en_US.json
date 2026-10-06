@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "Other models",
         "process": "Other processes"
-      }
+      },
+      "mode": "VRAM",
+      "modeTip": "The memory manager's VRAM mode, changed without a restart; a restart goes back to the mode the WebUI started in.",
+      "busyMode": "Switching VRAM mode…",
+      "modeSet": "VRAM mode: {{mode}}; models are placed again by the next generation",
+      "modes": {
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "modeTips": {
+        "high": "High: models stay on the GPU, nothing is moved back to RAM",
+        "normal": "Normal: models on the GPU as far as they fit, the text encoder on the GPU",
+        "low": "Low: models on the GPU as far as they fit, the text encoder in RAM"
+      },
+      "modeStartup": "the WebUI started in this mode"
     },
     "tabs": {
       "prompt": "Prompt",

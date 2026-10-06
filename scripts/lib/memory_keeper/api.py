@@ -34,6 +34,12 @@ def register(app):
     def pin(body: dict = Body(...)):
         return run(lambda: {"pinned": keeper.pin(str(body.get("id") or ""), bool(body.get("keep")))})
 
+    @app.post(f"{BASE}/vram-mode")
+    def set_vram_mode(body: dict = Body(...)):
+        from . import vram_mode
+
+        return run(lambda: dict(vram_mode.set_mode(str(body.get("mode") or "")), status=keeper.status(full=True)))
+
     @app.post(f"{BASE}/free")
     def free(body: dict = Body(...)):
         return run(lambda: keeper.free(str(body.get("level") or "vram"), category=body.get("category") or None))

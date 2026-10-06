@@ -402,7 +402,22 @@
         "llm": "LLM / VLM",
         "other": "其他模型",
         "process": "其他进程"
-      }
+      },
+      "mode": "显存",
+      "modeTip": "内存管理器的显存模式，无需重启即可切换；重启后恢复为 WebUI 启动时的模式。",
+      "busyMode": "正在切换显存模式…",
+      "modeSet": "显存模式：{{mode}}；下次生成时重新放置模型",
+      "modes": {
+        "high": "高",
+        "normal": "普通",
+        "low": "低"
+      },
+      "modeTips": {
+        "high": "高：模型留在 GPU 上，不移回内存",
+        "normal": "普通：模型尽量放在 GPU，文本编码器在 GPU",
+        "low": "低：模型尽量放在 GPU，文本编码器在内存"
+      },
+      "modeStartup": "WebUI 以此模式启动"
     },
     "tabs": {
       "prompt": "提示词",
