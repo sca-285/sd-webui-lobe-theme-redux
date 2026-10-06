@@ -10,7 +10,8 @@ import time
 
 from . import TAG, measure, sources
 
-LEVELS = ("vram", "all")
+LEVELS = ("vram", "ram", "all")
+LEVEL_NAMES = {"vram": "VRAM", "ram": "RAM", "all": "VRAM and RAM"}
 _lock = threading.RLock()
 
 
@@ -233,9 +234,10 @@ def act(holder_id, action, part=None, locked=True):
 
 def free(level, locked=True, category=None):
     """Everything but what is kept: "vram" takes it off the GPU (into RAM, or stopped when it has no RAM to go to),
-    "all" lets go of it altogether. category: only that section of the panel."""
+    "ram" lets go of what is only in RAM (models moved off the GPU, caches, servers on the CPU) and leaves the GPU
+    alone, "all" lets go of it altogether. category: only that section of the panel."""
     if level not in LEVELS:
-        raise Missing("Free what? vram or all.")
+        raise Missing("Free what? vram, ram or all.")
     if category and category not in sources.CATEGORY_KEYS:
         raise Missing(f"No such category: {category}")
     with _lock:
@@ -261,6 +263,12 @@ def free(level, locked=True, category=None):
                     if on_gpu == 0 or (on_gpu is None and h.get("kind") == "cache"):
                         continue  # nothing of it on the GPU
                     fn = h.get("to_ram") or (h.get("unload") if h.get("kind") != "cache" else None)
+                elif level == "ram":
+                    if h.get("kind") != "cache" and (u.get("vram") or 0) > 0:
+                        continue  # partly on the GPU: unloading it would free VRAM too, which is Free VRAM's call
+                    if h.get("kind") != "cache" and not u.get("ram"):
+                        continue  # nothing of it known to be in RAM
+                    fn = h.get("unload")
                 else:
                     fn = h.get("unload") or h.get("to_ram")
                 if not callable(fn):
@@ -270,10 +278,10 @@ def free(level, locked=True, category=None):
                     done.append(h["name"])
                 except Exception as exc:
                     skipped.append(f"{h['name']} ({exc})")
-            cleanup(give_back=level == "all")
+            cleanup(give_back=level != "vram")
         finally:
             quiet.__exit__(None, None, None)
-        print(f"{TAG} freed {'VRAM' if level == 'vram' else 'VRAM and RAM'}: {', '.join(done) or 'nothing to free'}"
+        print(f"{TAG} freed {LEVEL_NAMES[level]}: {', '.join(done) or 'nothing to free'}"
               + (f"; kept {', '.join(sorted(kept))}" if kept else ""))
         return dict(_freed(before, started), done=done, skipped=skipped, kept=sorted(kept), status=status(full=True))
 
@@ -283,7 +291,7 @@ def free(level, locked=True, category=None):
 
 def after_generation():
     """Settings → Memory Keeper → After each generation: free, once the WebUI's queue is free."""
-    level = {"Free VRAM": "vram", "Free VRAM and RAM": "all"}.get(str(opt("mk_after_generation", "Off")))
+    level = {"Free VRAM": "vram", "Free RAM": "ram", "Free VRAM and RAM": "all"}.get(str(opt("mk_after_generation", "Off")))
     if not level:
         return
 

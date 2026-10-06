@@ -313,6 +313,8 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
 }));
 
+const LEVEL_LABEL = { all: 'sidebar.memory.freeAll', ram: 'sidebar.memory.freeRam', vram: 'sidebar.memory.freeVram' } as const;
+
 /** The Memory Keeper's numbers and buttons; with enabled false it asks the server nothing. */
 export const useMemoryKeeper = (enabled = true) => {
   const { t } = useTranslation();
@@ -389,10 +391,10 @@ export const useMemoryKeeper = (enabled = true) => {
       report(r, part ? `${h.name} / ${part.name}` : h.name);
     });
 
-  const free = (level: 'vram' | 'all', category?: { key: string; name: string }) =>
+  const free = (level: 'vram' | 'ram' | 'all', category?: { key: string; name: string }) =>
     doing(t('sidebar.memory.busyFree'), async() => {
       const r = await call<Freed>('/free', { category: category?.key, level });
-      report(r, category ? category.name : t(level === 'vram' ? 'sidebar.memory.freeVram' : 'sidebar.memory.freeAll'));
+      report(r, category ? category.name : t(LEVEL_LABEL[level]));
     });
 
   const pin = (h: Holder) =>
@@ -524,9 +526,14 @@ export const MemoryControls = memo<{ legend?: boolean; mk: MemoryKeeperState }>(
     <>
       {legend && (status.gauges.gpu || status.gauges.ram) && <Legend colors={colors} />}
       <div className={styles.buttons}>
+        <Button disabled={Boolean(busy)} onClick={() => free('ram')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeRamTip')}>
+          {t('sidebar.memory.freeRam')}
+        </Button>
         <Button disabled={Boolean(busy)} onClick={() => free('vram')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeVramTip')}>
           {t('sidebar.memory.freeVram')}
         </Button>
+      </div>
+      <div className={styles.buttons}>
         <Button danger disabled={Boolean(busy)} onClick={() => free('all')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeAllTip')}>
           {t('sidebar.memory.freeAll')}
         </Button>

@@ -42,8 +42,8 @@ def on_ui_settings():
 
     section = ("memory_keeper", "Memory Keeper")
     shared.opts.add_option("mk_after_generation", shared.OptionInfo(
-        "Off", "After each generation", gr.Radio, {"choices": ["Off", "Free VRAM", "Free VRAM and RAM"]}, section=section)
-        .info("what you keep (🔒) stays; Free VRAM and RAM loads the checkpoint again on every generation"))
+        "Off", "After each generation", gr.Radio, {"choices": ["Off", "Free VRAM", "Free RAM", "Free VRAM and RAM"]}, section=section)
+        .info("what you keep (🔒) stays; Free RAM leaves what is on the GPU; Free VRAM and RAM loads the checkpoint again on every generation"))
     shared.opts.add_option("mk_give_back_ram", shared.OptionInfo(
         True, "Hand freed RAM back to the system", section=section)
         .info("Windows trims the WebUI's working set, Linux its heap"))
