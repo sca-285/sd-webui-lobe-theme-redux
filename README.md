@@ -825,6 +825,7 @@ In the **System** card of the Quick Setting sidebar (the *sd-webui-memory-keeper
 - 🔒 keeps a thing: freeing leaves it alone. Kept across restarts, in `memory_keeper.json` in the WebUI folder (the same file as the extension, so what you kept stays kept).
 - While a generation runs, the checkpoint and the WebUI's models are not touched.
 - **Settings → Memory Keeper**: free VRAM, or VRAM and RAM, after each generation; hand freed RAM back to the system.
+- SeedVR2 ([seedvr2-webui-neo-extension](https://github.com/sca-285/seedvr2-webui-neo-extension)) shows under Upscalers once it has run with *Keep SeedVR2 models in RAM*: its DiT and VAE, each movable to RAM, and Unload to drop them.
 - Extensions that tell the extension what they hold (`shared.memory_holders`) show here the same way.
 
 The work is done by the theme's `scripts/memory_keeper.py` at `/lobe/memory`; remove the standalone extension if it is installed. **Theme Settings → Quick Setting Sidebar → Memory keeper** turns it off.

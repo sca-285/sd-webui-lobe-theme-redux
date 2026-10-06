@@ -402,6 +402,63 @@ def _caches():
             + _clipvision_cache() + _interrogator() + _face_restorers())
 
 
+# ------------------------------------------------------------------ extensions known by name
+
+SEEDVR2_CACHE = "sd_webui_seedvr2_src.core.model_cache"  # seedvr2-webui-neo-extension's package, once it has run
+
+
+def _seedvr2():
+    """SeedVR2's DiT and VAE, kept in RAM between images by "Keep SeedVR2 models in RAM"."""
+    module = sys.modules.get(SEEDVR2_CACHE)
+    if module is None:
+        return []
+    cache = module.get_global_cache()
+    slots = (("dit", "DiT", "_dit_models", cache.remove_dit), ("vae", "VAE", "_vae_models", cache.remove_vae))
+
+    def held():
+        out = []
+        for kind, label, attr, remove in slots:
+            for node_id, entry in list((getattr(cache, attr, None) or {}).items()):
+                model = entry[0] if isinstance(entry, tuple) else entry
+                if model is not None:
+                    out.append((f"{kind}:{node_id}", f"{label} · {getattr(model, '_model_name', None) or node_id}", model, node_id, remove))
+        return out
+
+    def parts():
+        return [dict(measure.module_bytes(model), id=pid, name=name) for pid, name, model, _, _ in held()]
+
+    def usage():
+        found = held()
+        if not found:
+            return None
+        total = {"vram": 0, "ram": 0}
+        for _, _, model, _, _ in found:
+            for k, v in measure.module_bytes(model).items():
+                total[k] += v
+        return total
+
+    def unload():
+        for _, _, _, node_id, remove in held():
+            remove({"node_id": node_id})  # also drops the runner templates that use it
+
+    def to_cpu(model):
+        if measure.module_bytes(model)["vram"]:
+            model.to("cpu")  # SeedVR2 places its models itself, not through the WebUI's memory manager
+
+    def to_ram():
+        for _, _, model, _, _ in held():
+            to_cpu(model)
+
+    def part_to_ram(part_id):
+        for pid, _, model, _, _ in held():
+            if pid == part_id:
+                to_cpu(model)
+
+    return [{"id": "seedvr2", "name": "SeedVR2", "category": "upscaler", "source": "SeedVR2", "kind": "model",
+             "detail": "Kept in RAM between images; read again from disk when used", "usage": usage, "parts": parts,
+             "to_ram": to_ram, "part_to_ram": part_to_ram, "unload": unload, "webui": True}]
+
+
 # ------------------------------------------------------------------ other extensions
 
 
@@ -424,7 +481,7 @@ _reported = set()
 
 def holders():
     out = []
-    for source in (_checkpoint, _others, _caches, registered):
+    for source in (_checkpoint, _others, _caches, _seedvr2, registered):
         try:
             out += source()
         except Exception as exc:
