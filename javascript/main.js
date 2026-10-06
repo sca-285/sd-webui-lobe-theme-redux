@@ -4,7 +4,7 @@
   window.__LOBE_THEME_ENTRY__ = true;
   var script = document.currentScript;
   var base = (script && script.src) || location.href;
-  import(new URL("chunks/main-PBF4c4Iv.js", base).href).catch(function (error) {
+  import(new URL("chunks/main-DT02ropY.js", base).href).catch(function (error) {
     console.error('[Lobe Theme Redux] could not load', error);
   });
 })();

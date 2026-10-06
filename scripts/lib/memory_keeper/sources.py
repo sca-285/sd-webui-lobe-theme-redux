@@ -20,8 +20,9 @@ from __future__ import annotations
 import importlib
 import os
 import sys
+import time
 
-from . import measure
+from . import TAG, measure
 
 # the panel's sections, in this order; a holder names its category by the key
 CATEGORIES = (
@@ -245,11 +246,44 @@ def _others():
 # ------------------------------------------------------------------ caches
 
 
+_FOUND = {}  # name: the function, once found
+_MISSED = {}  # name: when it was last looked for in vain
+_LOOK_AGAIN = 30.0
+
+
+def _cached(obj):
+    """An lru_cache'd function, or None. Some modules answer any attribute with an object that raises on use
+    (torch.classes, torch.ops: "Tried to instantiate class ..."): anything but a plain answer is a no."""
+    try:
+        return obj if callable(getattr(obj, "cache_clear", None)) and callable(getattr(obj, "cache_info", None)) else None
+    except Exception:
+        return None
+
+
 def _find_global(name):
-    """A function the WebUI's builtin extensions keep at module level (they are loaded under several names)."""
-    for module in list(sys.modules.values()):
-        fn = getattr(module, name, None) if module is not None else None
-        if callable(getattr(fn, "cache_clear", None)):
+    """A function the WebUI's builtin extensions keep at module level (they are loaded under several names).
+    Found once, then kept; not found, looked for again every half minute, not on every refresh of the card."""
+    if name in _FOUND:
+        return _FOUND[name]
+    if time.time() - _MISSED.get(name, 0.0) < _LOOK_AGAIN:
+        return None
+    fn = _search(name)
+    if fn is None:
+        _MISSED[name] = time.time()
+    else:
+        _FOUND[name] = fn
+    return fn
+
+
+def _search(name):
+    for module_name, module in list(sys.modules.items()):
+        if module is None or module_name == "torch" or module_name.startswith(("torch.", "torch_")):
+            continue
+        try:
+            fn = _cached(getattr(module, name, None))
+        except Exception:
+            continue
+        if fn is not None:
             return fn
     try:  # scripts are loaded without a sys.modules entry: look in their functions' globals
         from modules import scripts
@@ -258,7 +292,7 @@ def _find_global(name):
             for script in getattr(runner, "scripts", None) or []:
                 for attr in vars(type(script)).values():
                     g = getattr(attr, "__globals__", None)
-                    if g and callable(getattr(g.get(name), "cache_clear", None)):
+                    if g and _cached(g.get(name)) is not None:
                         return g[name]
     except Exception:
         pass
@@ -385,11 +419,18 @@ def registered():
         return []
 
 
+_reported = set()
+
+
 def holders():
     out = []
     for source in (_checkpoint, _others, _caches, registered):
         try:
             out += source()
         except Exception as exc:
-            print(f"[Memory Keeper] {source.__name__}: {exc}")
+            # once per message: the card asks every few seconds
+            message = f"{source.__name__}: {exc}"
+            if message not in _reported:
+                _reported.add(message)
+                print(f"{TAG} {message}")
     return out

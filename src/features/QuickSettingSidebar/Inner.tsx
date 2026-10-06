@@ -64,10 +64,11 @@ const Inner = memo<DivProps>(() => {
         )}
         {setting.enableSystemMonitor && (
           <Suspense fallback={null}>
-            <SystemMonitor />
+            <SystemMonitor memory={setting.enableMemoryKeeper} />
           </Suspense>
         )}
-        {setting.enableMemoryKeeper && (
+        {/* with the System card on, the Memory Keeper is part of it */}
+        {setting.enableMemoryKeeper && !setting.enableSystemMonitor && (
           <Suspense fallback={null}>
             <MemoryKeeper />
           </Suspense>

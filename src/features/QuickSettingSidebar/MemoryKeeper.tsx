@@ -123,8 +123,20 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
   buttons: css`
     display: flex;
-    flex-wrap: wrap;
     gap: 6px;
+    margin-block-start: 2px;
+
+    /* the theme gives every button min-width: fit-content !important: these share one row */
+    .ant-btn {
+      min-width: 0 !important;
+      padding-inline: 6px;
+      font-size: 12px;
+    }
+
+    .ant-btn > span:not(.ant-btn-icon) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   `,
   card: css`
     display: flex;
@@ -197,6 +209,10 @@ const useStyles = createStyles(({ css, token }) => ({
     flex-direction: column;
     gap: 10px;
     margin-block-start: 4px;
+
+    .ant-btn {
+      font-size: 12px;
+    }
   `,
   message: css`
     padding: 4px 6px;
@@ -297,8 +313,8 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
 }));
 
-const MemoryKeeper = memo(() => {
-  const { cx, styles, theme } = useStyles();
+/** The Memory Keeper's numbers and buttons; with enabled false it asks the server nothing. */
+export const useMemoryKeeper = (enabled = true) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<Status | null>(null);
   const [full, setFull] = useState<Status | null>(null);
@@ -310,9 +326,6 @@ const MemoryKeeper = memo(() => {
   openRef.current = open;
   const busyRef = useRef(busy);
   busyRef.current = busy;
-
-  // the theme's colour, then one far from it (a purple primary is common), then grey
-  const colors = [theme.colorPrimary, theme.cyan, theme.colorTextQuaternary];
 
   const refresh = useCallback(async(wantFull?: boolean) => {
     try {
@@ -327,6 +340,7 @@ const MemoryKeeper = memo(() => {
   }, []);
 
   useEffect(() => {
+    if (!enabled) return;
     let stopped = false;
     let timer: number | undefined;
     const tick = async() => {
@@ -338,12 +352,13 @@ const MemoryKeeper = memo(() => {
       stopped = true;
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
     if (open) refresh(true);
     else setMessage('');
-  }, [open]);
+  }, [open, enabled]);
 
   const report = (r: Freed, what: string) => {
     const amount = [r.vram === undefined ? '' : `${size(r.vram) || '0 MB'} VRAM`, r.ram === undefined ? '' : `${size(r.ram) || '0 MB'} RAM`]
@@ -385,7 +400,42 @@ const MemoryKeeper = memo(() => {
       await call('/pin', { id: h.id, keep: !h.pinned });
     });
 
-  if (missing || !status) return null;
+  return { act, busy, free, full, message, missing, open, pin, setOpen, status };
+};
+
+export type MemoryKeeperState = ReturnType<typeof useMemoryKeeper>;
+
+/** The colours of the WebUI, what it started and other programs: the second far from a purple primary. */
+export const useMemoryColors = (webui?: string) => {
+  const { theme } = useStyles();
+  return [webui || theme.colorPrimary, theme.cyan, theme.colorTextQuaternary];
+};
+
+const Legend = memo<{ colors: string[] }>(({ colors }) => {
+  const { styles } = useStyles();
+  const { t } = useTranslation();
+  return (
+    <div className={styles.legend}>
+      {(['webui', 'started', 'others'] as const).map((key, i) => (
+        <span key={key}>
+          <i style={{ background: colors[i] }} />
+          {t(`sidebar.memory.${key}`)}
+        </span>
+      ))}
+    </div>
+  );
+});
+
+/**
+ * Free VRAM, Free VRAM + RAM and Details (what holds memory, by section), for the
+ * System card or the Memory card.
+ */
+export const MemoryControls = memo<{ legend?: boolean; mk: MemoryKeeperState }>(({ legend, mk }) => {
+  const { cx, styles, theme } = useStyles();
+  const { t } = useTranslation();
+  const colors = useMemoryColors();
+  const { act, busy, free, full, message, open, pin, setOpen, status } = mk;
+  if (!status) return null;
 
   const catName = (key: string, fallback: string) => t(`sidebar.memory.categories.${key}` as any, { defaultValue: fallback }) as string;
 
@@ -395,25 +445,6 @@ const MemoryKeeper = memo(() => {
     const bits = [u.vram ? `GPU ${size(u.vram)}` : '', u.ram ? `RAM ${size(u.ram)}` : ''].filter(Boolean);
     if (!bits.length && u.vram === null && u.ram === null) return t('sidebar.memory.loaded');
     return bits.join(' · ') || t('sidebar.memory.nothingHeld');
-  };
-
-  const gauge = (label: string, g: Gauge | null) => {
-    if (!g) return null;
-    const parts = split(g);
-    return (
-      <div className={styles.rows}>
-        <span className={styles.label}>{label}</span>
-        <div
-          className={styles.bar}
-          title={`${g.name ? `${g.name}\n` : ''}${t('sidebar.memory.webui')} ${size(parts[0])} · ${t('sidebar.memory.started')} ${size(parts[1])} · ${t('sidebar.memory.others')} ${size(parts[2])} · ${t('sidebar.memory.free')} ${size(g.free)}`}
-        >
-          {parts.map((n, i) => (
-            <div className={styles.seg} key={i} style={{ background: colors[i], width: `${(100 * n) / g.total}%` }} />
-          ))}
-          <span className={styles.text}>{`${((g.total - g.free) / GB).toFixed(1)} / ${(g.total / GB).toFixed(1)} GB`}</span>
-        </div>
-      </div>
-    );
   };
 
   const holderRow = (h: Holder) => {
@@ -490,62 +521,33 @@ const MemoryKeeper = memo(() => {
   const keptCount = (full || status).pinned?.length || 0;
 
   return (
-    <div className={styles.card}>
-      <div className={styles.head}>
-        <span className={styles.title}>{t('sidebar.memory.title')}</span>
-        {status.generating && <span className={styles.tag}>{t('sidebar.memory.generating')}</span>}
-        <span style={{ flex: 1 }} />
-        <Button
-          icon={open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-          iconPosition={'end'}
-          onClick={() => setOpen(!open)}
-          size={'small'}
-          type={'text'}
-        >
-          {t('sidebar.memory.details')}
-        </Button>
-      </div>
-      {gauge('VRAM', status.gauges.gpu)}
-      {gauge('RAM', status.gauges.ram)}
-      {(status.gauges.gpu || status.gauges.ram) && (
-        <div className={styles.legend}>
-          <span>
-            <i style={{ background: colors[0] }} />
-            {t('sidebar.memory.webui')}
-          </span>
-          <span>
-            <i style={{ background: colors[1] }} />
-            {t('sidebar.memory.started')}
-          </span>
-          <span>
-            <i style={{ background: colors[2] }} />
-            {t('sidebar.memory.others')}
-          </span>
-        </div>
-      )}
+    <>
+      {legend && (status.gauges.gpu || status.gauges.ram) && <Legend colors={colors} />}
       <div className={styles.buttons}>
-        <Button
-          disabled={Boolean(busy)}
-          onClick={() => free('vram')}
-          size={'small'}
-          style={{ flex: 1 }}
-          title={t('sidebar.memory.freeVramTip')}
-        >
+        <Button disabled={Boolean(busy)} onClick={() => free('vram')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeVramTip')}>
           {t('sidebar.memory.freeVram')}
         </Button>
-        <Button
-          danger
-          disabled={Boolean(busy)}
-          onClick={() => free('all')}
-          size={'small'}
-          style={{ flex: 1 }}
-          title={t('sidebar.memory.freeAllTip')}
-        >
+        <Button danger disabled={Boolean(busy)} onClick={() => free('all')} size={'small'} style={{ flex: '1 1 0' }} title={t('sidebar.memory.freeAllTip')}>
           {t('sidebar.memory.freeAll')}
         </Button>
+        <Button
+          icon={open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          onClick={() => setOpen(!open)}
+          size={'small'}
+          style={{ flex: 'none' }}
+          title={t('sidebar.memory.details')}
+          type={open ? 'primary' : 'default'}
+        />
       </div>
       {open && (
         <div className={styles.list}>
+          {!legend && (
+            <div className={styles.head}>
+              <span className={styles.title}>{t('sidebar.memory.title')}</span>
+              {status.generating && <span className={styles.tag}>{t('sidebar.memory.generating')}</span>}
+            </div>
+          )}
+          {!legend && <Legend colors={colors} />}
           {!full && <span className={styles.dim}>{t('sidebar.memory.reading')}</span>}
           {full && !sections.length && <span className={styles.dim}>{t('sidebar.memory.nothing')}</span>}
           {sections.map((c) => {
@@ -581,6 +583,47 @@ const MemoryKeeper = memo(() => {
         </div>
       )}
       {(busy.trim() || message) && <div className={styles.message}>{busy.trim() || message}</div>}
+    </>
+  );
+});
+
+/** The Memory card of its own, for when the System card is off. */
+const MemoryKeeper = memo(() => {
+  const { styles } = useStyles();
+  const { t } = useTranslation();
+  const mk = useMemoryKeeper();
+  const colors = useMemoryColors();
+  const { missing, status } = mk;
+  if (missing || !status) return null;
+
+  const gauge = (label: string, g: Gauge | null) => {
+    if (!g) return null;
+    const parts = split(g);
+    return (
+      <div className={styles.rows}>
+        <span className={styles.label}>{label}</span>
+        <div
+          className={styles.bar}
+          title={`${g.name ? `${g.name}\n` : ''}${t('sidebar.memory.webui')} ${size(parts[0])} · ${t('sidebar.memory.started')} ${size(parts[1])} · ${t('sidebar.memory.others')} ${size(parts[2])} · ${t('sidebar.memory.free')} ${size(g.free)}`}
+        >
+          {parts.map((n, i) => (
+            <div className={styles.seg} key={i} style={{ background: colors[i], width: `${(100 * n) / g.total}%` }} />
+          ))}
+          <span className={styles.text}>{`${((g.total - g.free) / GB).toFixed(1)} / ${(g.total / GB).toFixed(1)} GB`}</span>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.head}>
+        <span className={styles.title}>{t('sidebar.memory.title')}</span>
+        {status.generating && <span className={styles.tag}>{t('sidebar.memory.generating')}</span>}
+      </div>
+      {gauge('VRAM', status.gauges.gpu)}
+      {gauge('RAM', status.gauges.ram)}
+      <MemoryControls legend mk={mk} />
     </div>
   );
 });

@@ -3,10 +3,15 @@
  * Crystools monitor: CPU, RAM, GPU load, VRAM, temperature and power, with
  * a short history line for the loads. Polls /lobe/system while the page is
  * visible; one reading is shared by every open tab (the server caches it).
+ *
+ * With the Memory Keeper on, the RAM and VRAM bars show who holds what (the
+ * WebUI, what it started, other programs) and its buttons sit under them.
  */
 import { createStyles } from 'antd-style';
 import { memo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { type Gauge, MemoryControls, size, split, useMemoryColors, useMemoryKeeper } from './MemoryKeeper';
 
 interface Gpu {
   name: string;
@@ -112,15 +117,35 @@ const useStyles = createStyles(({ css, token }) => ({
 
 const gb = (bytes: number) => (bytes / 1024 ** 3).toFixed(bytes >= 100 * 1024 ** 3 ? 0 : 1);
 
-const Bar = memo<{ label: string; percent: number | null; text: string }>(({ label, percent, text }) => {
+interface BarProps {
+  label: string;
+  /** who holds the used part, as bytes of `total`: the WebUI, what it started, other programs */
+  parts?: { bytes: [number, number, number]; colors: string[]; title: string; total: number };
+  percent: number | null;
+  text: string;
+}
+
+const Bar = memo<BarProps>(({ label, parts, percent, text }) => {
   const { styles, theme } = useStyles();
   const p = Math.max(0, Math.min(100, percent ?? 0));
   const color = p >= 90 ? theme.colorError : p >= 70 ? theme.colorWarning : theme.colorPrimary;
   return (
     <div className={styles.row}>
       <span className={styles.label}>{label}</span>
-      <div className={styles.bar} title={`${label}: ${text}`}>
-        <div className={styles.fill} style={{ background: color, opacity: 0.55, width: `${p}%` }} />
+      <div className={styles.bar} title={parts ? `${label}: ${text}\n${parts.title}` : `${label}: ${text}`}>
+        {parts ? (
+          <div className={styles.fill} style={{ display: 'flex', width: `${p}%` }}>
+            {parts.bytes.map((n, i) => (
+              <div
+                key={i}
+                // the WebUI's part keeps the load colour of the bar
+                style={{ background: i === 0 ? color : parts.colors[i], flex: `${n} 0 0`, opacity: 0.6 }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.fill} style={{ background: color, opacity: 0.55, width: `${p}%` }} />
+        )}
         <span className={styles.text}>{text}</span>
       </div>
     </div>
@@ -154,9 +179,12 @@ const Spark = memo<{ series: { color: string; values: number[] }[] }>(({ series 
   );
 });
 
-const SystemMonitor = memo(() => {
+const SystemMonitor = memo<{ memory?: boolean }>(({ memory }) => {
   const { styles, theme } = useStyles();
   const { t } = useTranslation();
+  const mk = useMemoryKeeper(Boolean(memory));
+  const memoryColors = useMemoryColors();
+  const mkOn = Boolean(memory) && !mk.missing && Boolean(mk.status);
   const [stats, setStats] = useState<Stats | null>(null);
   const [failed, setFailed] = useState(false);
   const history = useRef<{ cpu: number[]; gpu: number[]; ram: number[]; vram: number[] }>({
@@ -205,6 +233,20 @@ const SystemMonitor = memo(() => {
   if (!stats) return null;
 
   const h = history.current;
+
+  // who holds the memory this card counts as used (Memory Keeper's split, scaled to the card's own numbers)
+  const partsOf = (used: number, total: number, g: Gauge | null | undefined): BarProps['parts'] => {
+    if (!mkOn || !g) return undefined;
+    const [webui, kids] = split({ ...g, free: Math.max(0, g.total - used), total: Math.max(g.total, used) });
+    const bytes: [number, number, number] = [webui, kids, Math.max(0, used - webui - kids)];
+    return {
+      bytes,
+      colors: memoryColors,
+      title: `${t('sidebar.memory.webui')} ${size(bytes[0])} · ${t('sidebar.memory.started')} ${size(bytes[1])} · ${t('sidebar.memory.others')} ${size(bytes[2])}`,
+      total,
+    };
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.head}>
@@ -229,6 +271,7 @@ const SystemMonitor = memo(() => {
       {stats.ram && (
         <Bar
           label="RAM"
+          parts={partsOf(stats.ram.used, stats.ram.total, mk.status?.gauges.ram)}
           percent={(stats.ram.used / stats.ram.total) * 100}
           text={`${gb(stats.ram.used)} / ${gb(stats.ram.total)} GB`}
         />
@@ -238,6 +281,7 @@ const SystemMonitor = memo(() => {
           {g.util !== null && <Bar label={stats.gpus.length > 1 ? `GPU${i}` : 'GPU'} percent={g.util} text={`${g.util}%`} />}
           <Bar
             label="VRAM"
+            parts={i === 0 ? partsOf(g.vram_used, g.vram_total, mk.status?.gauges.gpu) : undefined}
             percent={(g.vram_used / g.vram_total) * 100}
             text={`${gb(g.vram_used)} / ${gb(g.vram_total)} GB`}
           />
@@ -264,6 +308,7 @@ const SystemMonitor = memo(() => {
           {t('sidebar.system.noNvml')}
         </span>
       )}
+      {mkOn && <MemoryControls mk={mk} />}
     </div>
   );
 });
