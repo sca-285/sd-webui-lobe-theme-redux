@@ -2,19 +2,33 @@
 
 # Changelog
 
-Lobe Theme Redux is a continuation of [Lobe Theme](https://github.com/lobehub/sd-webui-lobe-theme) 3.5.4 for Stable Diffusion WebUI Forge, Forge Classic (Neo) and reForge. Redux is published by committing the built `javascript/` folder to `main`, without version numbers, so its history is told here in phases, newest first. The changelog of the original Lobe Theme follows below, unchanged.
+Lobe Theme Redux (LTR) is a continuation of [Lobe Theme](https://github.com/lobehub/sd-webui-lobe-theme) 3.5.4 for Stable Diffusion WebUI Forge, Forge Classic (Neo) and reForge. Its versions are numbered from LTR v1.0, the start of Redux; newest first. The changelog of the original Lobe Theme follows below, unchanged.
 
-- [Phase 6 · Memory Keeper](#phase-6--memory-keeper) (2026-10-06)
-- [Phase 5 · Chaotic seeds](#phase-5--chaotic-seeds) (2026-10-04)
-- [Phase 4 · Studio layouts, prompt sections, Extra Network rail](#phase-4--studio-layouts-prompt-sections-extra-network-rail) (2026-09-29 to 09-30)
-- [Phase 3 · Appearance, System monitor, progress effects](#phase-3--appearance-system-monitor-progress-effects) (2026-09-27 to 09-28)
-- [Phase 2 · Aspect ratios and image buttons](#phase-2--aspect-ratios-and-image-buttons) (2026-09-26)
-- [Phase 1 · Redux begins](#phase-1--redux-begins) (2026-09-25)
-- [Lobe Theme (original)](#lobe-theme-original)
+| Version | What it brought |
+| :-- | :-- |
+| [v1.6](#ltr-v16--vram-mode) | VRAM mode (High, Normal, Low) without a restart; this changelog |
+| [v1.5](#ltr-v15--memory-keeper) | Memory Keeper in the System card, SeedVR2, Free RAM / Free VRAM / Free VRAM+RAM |
+| [v1.4](#ltr-v14--chaotic-seeds) | Chaotic seeds, rolled on the server per image |
+| [v1.3](#ltr-v13--studio-layouts-prompt-sections-extra-network-rail) | Studio layouts, prompt sections, Extra Network rail, Vietnamese |
+| [v1.2](#ltr-v12--appearance-system-monitor-progress-effects) | Appearance, fonts, System monitor, folder tree, Aurora progress, result frames |
+| [v1.1](#ltr-v11--aspect-ratios-and-image-buttons) | Aspect ratios and suggested settings, image buttons under Generate |
+| [v1.0](#ltr-v10--redux-begins) | Forge, Neo and reForge; tab bar, command palette, history, presets, LoRA tools, offline assets |
+| [Lobe Theme](#lobe-theme-original) | The original changelog, up to 3.5.4 |
 
-### Phase 6 · Memory Keeper
+### LTR v1.6 · VRAM mode
 
-<sup>2026-10-06</sup>
+#### ✨ Features
+
+- **VRAM mode** in the System card: *High · Normal · Low*, switched without a restart on Forge, Forge Classic/Neo and reForge alike. The models are taken off the GPU and the checkpoint is unloaded, so the next generation places them under the new mode; Low keeps the text encoder in RAM. Not remembered across restarts ([f77b425](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f77b425)).
+- This changelog, with the Redux history by version ([1780f63](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1780f63)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### LTR v1.5 · Memory Keeper
 
 The *sd-webui-memory-keeper* extension, built into the theme: what holds the VRAM and the RAM, and letting go of it.
 
@@ -24,7 +38,6 @@ The *sd-webui-memory-keeper* extension, built into the theme: what holds the VRA
 - Merged into the **System** card: its RAM and VRAM bars show who holds the memory, and the buttons sit under them. A Memory card of its own is kept for when the System monitor is off ([ffc5581](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/ffc5581)).
 - **SeedVR2** ([seedvr2-webui-neo-extension](https://github.com/sca-285/seedvr2-webui-neo-extension)): its DiT and VAE, kept in RAM between images, are found and can be moved to RAM or unloaded ([1749e7d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1749e7d)).
 - **Free RAM**, **Free VRAM** and **Free VRAM+RAM** by name. Free RAM is new: it lets go of what is only in RAM and leaves the GPU alone. Also offered after each generation in Settings → Memory Keeper ([dd41d0e](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/dd41d0e)).
-- **VRAM mode** · *High · Normal · Low*, switched without a restart on Forge, Forge Classic/Neo and reForge alike. Not remembered across restarts ([f77b425](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f77b425)).
 
 #### 🐛 Bug Fixes
 
@@ -36,9 +49,7 @@ The *sd-webui-memory-keeper* extension, built into the theme: what holds the VRA
 
 </div>
 
-### Phase 5 · Chaotic seeds
-
-<sup>2026-10-04</sup>
+### LTR v1.4 · Chaotic seeds
 
 The reForge *Chaotic Seeds* extension, built into the theme.
 
@@ -57,9 +68,7 @@ The reForge *Chaotic Seeds* extension, built into the theme.
 
 </div>
 
-### Phase 4 · Studio layouts, prompt sections, Extra Network rail
-
-<sup>2026-09-29 to 2026-09-30</sup>
+### LTR v1.3 · Studio layouts, prompt sections, Extra Network rail
 
 #### ✨ Features
 
@@ -82,9 +91,7 @@ The reForge *Chaotic Seeds* extension, built into the theme.
 
 </div>
 
-### Phase 3 · Appearance, System monitor, progress effects
-
-<sup>2026-09-27 to 2026-09-28</sup>
+### LTR v1.2 · Appearance, System monitor, progress effects
 
 #### ✨ Features
 
@@ -105,9 +112,7 @@ The reForge *Chaotic Seeds* extension, built into the theme.
 
 </div>
 
-### Phase 2 · Aspect ratios and image buttons
-
-<sup>2026-09-26</sup>
+### LTR v1.1 · Aspect ratios and image buttons
 
 #### ✨ Features
 
@@ -124,9 +129,7 @@ The reForge *Chaotic Seeds* extension, built into the theme.
 
 </div>
 
-### Phase 1 · Redux begins
-
-<sup>2026-09-25</sup>
+### LTR v1.0 · Redux begins
 
 The theme brought from AUTOMATIC1111 on Gradio 3 to the Forge family: Forge and Forge Classic (Neo) on Gradio 4, and reForge on Gradio 3.41 ([460a78a](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/460a78a)) ([1120e4f](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1120e4f)) ([8841441](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/8841441)) ([836c049](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/836c049)) ([02d3f64](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/02d3f64)).
 
