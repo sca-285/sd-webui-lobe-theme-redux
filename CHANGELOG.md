@@ -22,6 +22,10 @@ Lobe Theme Redux (LTR) is a continuation of [Lobe Theme](https://github.com/lobe
 - **VRAM mode** in the System card: *High · Normal · Low*, switched without a restart on Forge, Forge Classic/Neo and reForge alike. The models are taken off the GPU and the checkpoint is unloaded, so the next generation places them under the new mode; Low keeps the text encoder in RAM. Not remembered across restarts ([f77b425](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f77b425)).
 - This changelog, with the Redux history by version ([1780f63](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1780f63)).
 
+#### 🐛 Bug Fixes
+
+- **Sharp corners** square the switches too, track and knob, the theme's and the extensions' (whose knobs are often drawn with `::before` / `::after`); radio dots and spinners stay round. Soft and Round are unchanged.
+
 <div align="right">
 
 [![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)

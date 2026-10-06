@@ -100,12 +100,29 @@ export const appearanceClasses = (s: WebuiSetting) => [
   `lobe-surface-${s.surfaceStyle || 'flat'}`,
 ];
 
+// what keeps its round ::before / ::after with sharp corners: radio dots, spinners, swatches
+const KEEP_ROUND_PSEUDO = [
+  '.ant-avatar',
+  '.ant-badge-dot',
+  '.ant-spin *',
+  '.ant-radio',
+  '.ant-radio *',
+  "input[type='radio']",
+  '.lobe-keep-round',
+  '.lobe-keep-round *',
+  "[class*='swatch']",
+  "[class*='Swatch']",
+  "[class*='spin']",
+  "[class*='loader']",
+  "[class*='loading']",
+].join(', ');
+
 export default () => css`
-  /* ---- sharp corners: everything square except what must stay round */
+  /* ---- sharp corners: everything square except what must stay round. Switches go square
+     too, track and knob, the theme's and the extensions' alike: a knob is often drawn
+     with ::before or ::after, which the first rule does not reach. */
   body.lobe-corner-sharp
     *:not(
-      .ant-switch,
-      .ant-switch *,
       .ant-avatar,
       .ant-badge-dot,
       .ant-spin-dot-item,
@@ -115,6 +132,11 @@ export default () => css`
       [class*='swatch'],
       [class*='Swatch']
     ) {
+    border-radius: 0 !important;
+  }
+
+  body.lobe-corner-sharp *:not(${KEEP_ROUND_PSEUDO})::before,
+  body.lobe-corner-sharp *:not(${KEEP_ROUND_PSEUDO})::after {
     border-radius: 0 !important;
   }
 
