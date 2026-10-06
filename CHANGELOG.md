@@ -2,6 +2,160 @@
 
 # Changelog
 
+Lobe Theme Redux is a continuation of [Lobe Theme](https://github.com/lobehub/sd-webui-lobe-theme) 3.5.4 for Stable Diffusion WebUI Forge, Forge Classic (Neo) and reForge. Redux is published by committing the built `javascript/` folder to `main`, without version numbers, so its history is told here in phases, newest first. The changelog of the original Lobe Theme follows below, unchanged.
+
+- [Phase 6 · Memory Keeper](#phase-6--memory-keeper) (2026-10-06)
+- [Phase 5 · Chaotic seeds](#phase-5--chaotic-seeds) (2026-10-04)
+- [Phase 4 · Studio layouts, prompt sections, Extra Network rail](#phase-4--studio-layouts-prompt-sections-extra-network-rail) (2026-09-29 to 09-30)
+- [Phase 3 · Appearance, System monitor, progress effects](#phase-3--appearance-system-monitor-progress-effects) (2026-09-27 to 09-28)
+- [Phase 2 · Aspect ratios and image buttons](#phase-2--aspect-ratios-and-image-buttons) (2026-09-26)
+- [Phase 1 · Redux begins](#phase-1--redux-begins) (2026-09-25)
+- [Lobe Theme (original)](#lobe-theme-original)
+
+### Phase 6 · Memory Keeper
+
+<sup>2026-10-06</sup>
+
+The *sd-webui-memory-keeper* extension, built into the theme: what holds the VRAM and the RAM, and letting go of it.
+
+#### ✨ Features
+
+- **Memory Keeper** under System in the Quick Setting sidebar: VRAM and RAM split into the WebUI, what it started (an LLM server...) and other programs; every holder by section (Checkpoint and its parts, LoRA, ControlNet & adapters, Upscalers, Face restore, Taggers, LLM / VLM, Other models, Other processes), with 🔒 to keep it, **→ RAM**, **Unload** or **Clear**. The server half runs from the theme's own `scripts/memory_keeper.py` at `/lobe/memory`; what was kept with the extension stays kept ([c74a883](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/c74a883)).
+- Merged into the **System** card: its RAM and VRAM bars show who holds the memory, and the buttons sit under them. A Memory card of its own is kept for when the System monitor is off ([ffc5581](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/ffc5581)).
+- **SeedVR2** ([seedvr2-webui-neo-extension](https://github.com/sca-285/seedvr2-webui-neo-extension)): its DiT and VAE, kept in RAM between images, are found and can be moved to RAM or unloaded ([1749e7d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1749e7d)).
+- **Free RAM**, **Free VRAM** and **Free VRAM+RAM** by name. Free RAM is new: it lets go of what is only in RAM and leaves the GPU alone. Also offered after each generation in Settings → Memory Keeper ([dd41d0e](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/dd41d0e)).
+- **VRAM mode** · *High · Normal · Low*, switched without a restart on Forge, Forge Classic/Neo and reForge alike. Not remembered across restarts ([f77b425](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f77b425)).
+
+#### 🐛 Bug Fixes
+
+- The LoRA and ControlNet cache search no longer trips on `torch.classes` ("Tried to instantiate class ..."), which hid the whole cache section and printed the error on every refresh; errors are now printed once ([ffc5581](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/ffc5581)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### Phase 5 · Chaotic seeds
+
+<sup>2026-10-04</sup>
+
+The reForge *Chaotic Seeds* extension, built into the theme.
+
+#### ✨ Features
+
+- **Chaotic seeds** under Seed in txt2img and img2img: each image gets a seed with a random number of digits between a min and a max (4 to 15 by default) ([02f4960](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/02f4960)).
+- Rolled on the server by the theme's `scripts/chaotic_seeds.py`, one seed per image of a batch (and per variation seed), with `Chaotic seeds: 4-15` in the infotext; pasted parameters turn it on or off ([dbbf07d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/dbbf07d)).
+
+#### 🐛 Bug Fixes
+
+- The digit lists open in the theme's colours instead of a blank white list, and the hint shows the Reuse seed button's own icon ([75f3288](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/75f3288)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### Phase 4 · Studio layouts, prompt sections, Extra Network rail
+
+<sup>2026-09-29 to 2026-09-30</sup>
+
+#### ✨ Features
+
+- **Prompt sections**: the positive prompt as up to six boxes joined with `BREAK`, with a token count each ([f0db913](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f0db913)).
+- **Extra Network side rail**: the model types as a column of icons down the sidebar instead of wrapping tabs ([f0db913](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/f0db913)); controls other extensions add to the tabs row go to the sidebar's footer ([bb9ec50](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/bb9ec50)).
+- **Layout presets**: *Classic*, *Studio* and *Studio, mirrored*, each shown as a small picture. Studio puts the tabs in a rail on the left and lays out txt2img and img2img as two full-height columns, Prompt / Parameters / Extensions on one side and the result on the other, with Generate always in view ([bfd1010](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/bfd1010)).
+- An icon-only logo for the rail ([55e2135](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/55e2135)).
+- **Vietnamese** (Tiếng Việt), and every translation complete for Redux's settings and tools ([208c1b2](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/208c1b2)).
+- CI on every push to `main`: lint, types, tests and the build ([55e2135](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/55e2135)).
+
+#### 🐛 Bug Fixes
+
+- Studio: the result column keeps the image at full height, with the generation info and the Impact ADetailer comparer under it instead of squeezing it ([55e2135](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/55e2135)).
+- Studio: the prompt's token counters keep their own size ([0c33a4d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/0c33a4d)).
+- The saved language is followed on load ([bfd1010](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/bfd1010)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### Phase 3 · Appearance, System monitor, progress effects
+
+<sup>2026-09-27 to 2026-09-28</sup>
+
+#### ✨ Features
+
+- **Appearance**: corners (Sharp, Soft, Round), density (Comfortable, Compact), surfaces (Flat, Glass, Elevated), interface fonts (HarmonyOS Sans, Inter, Geist, Manrope, Be Vietnam Pro) and monospace fonts (Hack, Geist Mono, JetBrains Mono), all bundled so they work offline; a spark mark and a wordmark logo ([17ccb5b](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/17ccb5b)).
+- **System monitor** under the quick settings: CPU, RAM, GPU load, VRAM, temperature, power and disk, with a history line; GPU readings through NVIDIA's NVML, installed on the next start ([17ccb5b](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/17ccb5b)).
+- **Folder tree** for Extra Network folders ([17ccb5b](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/17ccb5b)), working with Windows paths and the leading-slash option ([b5e271d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/b5e271d)).
+- **Accordions one at a time**, without ever switching an extension off; **Swap sidebars** ([17ccb5b](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/17ccb5b)).
+- The split previewer, prompt highlighting, prompt editor and image info are regular options, no longer experimental ([94e10f7](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/94e10f7)) ([17ccb5b](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/17ccb5b)).
+- **Aurora progress bar** with the step, the batch position, the percent and the ETA; **result frames** around the image while it generates: Glow edge, Pulse, Ambient, Scan, Orbit ([b5e271d](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/b5e271d)).
+
+#### ♻ Housekeeping
+
+- The original project's issue bots are removed ([004f1d9](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/004f1d9)) ([2cbfec7](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/2cbfec7)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### Phase 2 · Aspect ratios and image buttons
+
+<sup>2026-09-26</sup>
+
+#### ✨ Features
+
+- **Aspect ratios and suggested settings** under Width and Height: ratios at the trained sizes, a base size that follows the model, a ratio lock, and steps / CFG for the loaded model's family and its fast variants ([cc49e87](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/cc49e87)) ([6133067](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/6133067)).
+- **Image buttons under Generate** instead of under the gallery ([cc49e87](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/cc49e87)) ([72a410f](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/72a410f)).
+
+#### 🐛 Bug Fixes
+
+- Lint errors that failed CI ([66d46d0](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/66d46d0)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+### Phase 1 · Redux begins
+
+<sup>2026-09-25</sup>
+
+The theme brought from AUTOMATIC1111 on Gradio 3 to the Forge family: Forge and Forge Classic (Neo) on Gradio 4, and reForge on Gradio 3.41 ([460a78a](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/460a78a)) ([1120e4f](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/1120e4f)) ([8841441](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/8841441)) ([836c049](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/836c049)) ([02d3f64](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/02d3f64)).
+
+#### ✨ Features
+
+- **A tab bar that stays short**: only pinned tabs in the header, the rest under **All tabs**, grouped and searchable; saved on the server.
+- **Command palette** (<kbd>Ctrl</kbd> + <kbd>K</kbd>): actions, tabs, samplers, checkpoints, LoRAs, presets, recent generations and every WebUI setting.
+- **Generation history** kept on the server, with search, reuse, compare and save as preset.
+- **Presets** for parameters, never the prompts.
+- **LoRA card tools**: favourites, the model family the LoRA was trained for with a warning when it does not match, a weight control remembered per LoRA, trigger words, and an All / Favorites / Recent / Compatible filter.
+- Progress on the browser tab (a ring, then a ✓), and optional desktop notifications.
+- Logo, favicons and fonts shipped with the extension, so the theme works offline.
+
+#### ⚡ Improvements
+
+- Model families named after Neo's UI presets (SD1, SD2, XL, SD3, Flux, Klein, Qwen, Lumina, Z-Image, Wan, Anima, Ernie, PiD, Krea), read from the LoRA's training metadata, with short names matched as whole words ("animagine" is XL, not Anima; "rapid" is not PiD) ([2203281](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/2203281)) ([24aa6a2](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/24aa6a2)) ([016aeff](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/016aeff)) ([abaff30](https://github.com/sca-285/sd-webui-lobe-theme-redux/commit/abaff30)).
+
+<div align="right">
+
+[![](https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square)](#readme-top)
+
+</div>
+
+---
+
+## Lobe Theme (original)
+
+The changelog of Lobe Theme by LobeHub, up to 3.5.4, the version Redux continues from.
+
 ### [Version 3.5.4](https://github.com/lobehub/sd-webui-lobe-theme/compare/v3.5.3...v3.5.4)
 
 <sup>Released on **2024-05-24**</sup>
