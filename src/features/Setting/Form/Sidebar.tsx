@@ -73,6 +73,14 @@ const SettingForm = memo(() => {
           name: 'enableSystemMonitor',
           valuePropName: 'checked',
         },
+        {
+          children: <Switch />,
+          desc: t('setting.memoryKeeper.desc'),
+          hidden: !rawSetting.enableSidebar,
+          label: t('setting.memoryKeeper.title'),
+          name: 'enableMemoryKeeper',
+          valuePropName: 'checked',
+        },
       ],
 
       title: t('setting.group.quickSettingSidebar'),

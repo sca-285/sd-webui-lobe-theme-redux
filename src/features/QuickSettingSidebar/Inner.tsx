@@ -16,6 +16,7 @@ import { type DivProps } from '@/types';
 const PromptEditor = lazy(() => import('@/components/PromptEditor'));
 const PresetsPanel = lazy(() => import('@/features/Tools/PresetsPanel'));
 const SystemMonitor = lazy(() => import('./SystemMonitor'));
+const MemoryKeeper = lazy(() => import('./MemoryKeeper'));
 
 enum Tabs {
   Presets = 'presets',
@@ -64,6 +65,11 @@ const Inner = memo<DivProps>(() => {
         {setting.enableSystemMonitor && (
           <Suspense fallback={null}>
             <SystemMonitor />
+          </Suspense>
+        )}
+        {setting.enableMemoryKeeper && (
+          <Suspense fallback={null}>
+            <MemoryKeeper />
           </Suspense>
         )}
       </Flexbox>

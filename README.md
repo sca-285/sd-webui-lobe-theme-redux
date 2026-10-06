@@ -58,6 +58,7 @@ The original Lobe Theme was made for AUTOMATIC1111 on Gradio 3. **Redux brings i
 - [Layout presets: Classic and Studio](#layout-presets-classic-and-studio)
 - [Aspect ratios and suggested settings](#aspect-ratios-and-suggested-settings)
 - [Chaotic seeds](#chaotic-seeds)
+- [Memory keeper](#memory-keeper)
 - [Prompt sections](#prompt-sections)
 - [A tab bar that stays short](#a-tab-bar-that-stays-short)
 - [Extra Network, redesigned](#extra-network-redesigned)
@@ -107,6 +108,10 @@ Under **Width** and **Height**:
 ### Chaotic seeds
 
 Under **Seed**, 🎲 **Chaotic seeds**: every image gets a seed with a random number of digits, between **Digits** min and max (4 to 15 by default), so seeds jump across magnitudes instead of always landing around ten digits as `-1` does. Each image of a batch gets its own, and the infotext records `Chaotic seeds: 4-15` beside the seed.
+
+### Memory keeper
+
+Under **System** in the Quick Setting sidebar, **Memory** shows what holds the VRAM and the RAM: the WebUI, what it started (an LLM server...) and other programs. **Free VRAM** and **Free VRAM + RAM** let go of everything but what you keep; **Details** lists the checkpoint (and its parts), LoRA, ControlNet, upscalers, face restore, taggers and LLMs, each with 🔒 to keep it and → RAM, Unload or Clear.
 
 ### Prompt sections
 
@@ -803,6 +808,26 @@ Under **Seed**, in txt2img and img2img (the reForge *Chaotic Seeds* extension, b
 - Remove the old extension if it is installed, or both will roll.
 
 **Theme Settings → Tools → Chaotic seeds** turns it off.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+#### `29` Memory Keeper
+
+Under **System** in the Quick Setting sidebar (the *sd-webui-memory-keeper* extension, built into the theme):
+
+- **VRAM** and **RAM** bars split into the WebUI, what it started (an LLM server such as Prompt Vault's Qwen) and every other program; the tooltip gives each in GB.
+- **Free VRAM**: everything not kept off the GPU; models go to RAM (back fast), servers are stopped. **Free VRAM + RAM**: everything not kept is let go of, and the RAM is handed back to the system.
+- **Details** lists what holds memory, in sections: Checkpoint (UNet, text encoders, VAE, each movable on its own), LoRA, ControlNet & adapters, Upscalers, Face restore & detailers, Taggers & interrogators, LLM / VLM, Other models, Other processes. Each section has its total and a **Free** of its own; each thing has **→ RAM**, **Unload** or **Clear** as it allows.
+- 🔒 keeps a thing: freeing leaves it alone. Kept across restarts, in `memory_keeper.json` in the WebUI folder (the same file as the extension, so what you kept stays kept).
+- While a generation runs, the checkpoint and the WebUI's models are not touched.
+- **Settings → Memory Keeper**: free VRAM, or VRAM and RAM, after each generation; hand freed RAM back to the system.
+- Extensions that tell the extension what they hold (`shared.memory_holders`) show here the same way.
+
+The work is done by the theme's `scripts/memory_keeper.py` at `/lobe/memory`; remove the standalone extension if it is installed. **Theme Settings → Quick Setting Sidebar → Memory keeper** hides the card.
 
 <div align="right">
 

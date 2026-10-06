@@ -16,6 +16,7 @@ export interface WebuiSetting {
   enableHistory: boolean;
   enableImageInfo: boolean;
   enableLoraTools: boolean;
+  enableMemoryKeeper: boolean;
   enableNotification: boolean;
   enablePresets: boolean;
   enableSidebar: boolean;
@@ -70,6 +71,7 @@ export const DEFAULT_SETTING: WebuiSetting = {
   enableHistory: true,
   enableImageInfo: true,
   enableLoraTools: true,
+  enableMemoryKeeper: true,
   enableNotification: false,
   enablePresets: true,
   enableSidebar: true,
